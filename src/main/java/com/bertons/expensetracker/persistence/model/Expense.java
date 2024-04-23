@@ -18,6 +18,7 @@ public class Expense {
     }
 
     private Long id;
+    /**Expense value in €, EUR*/
     private Double amount;
     private LocalDateTime date;
     private String description;
