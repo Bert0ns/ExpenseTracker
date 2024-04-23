@@ -1,6 +1,6 @@
 package com.bertons.expensetracker.persistence.model;
 
-import java.time.LocalDateTime;
+import java.sql.Date;
 import java.util.Objects;
 
 public class Expense {
@@ -17,25 +17,46 @@ public class Expense {
         Cash
     }
 
+    public static ExpenseType getExpenseTypeFromString(String expenseType) {
+        return switch (expenseType) {
+            case "Miscellaneous" -> ExpenseType.Miscellaneous;
+            case "Subscription" -> ExpenseType.Subscription;
+            case "EatingOut" -> ExpenseType.EatingOut;
+            case "Groceries" -> ExpenseType.Groceries;
+            case "Debt" -> ExpenseType.Debt;
+            case "Car" -> ExpenseType.Car;
+            default -> null;
+        };
+    }
+
+    public static PayingMethod getPayingMethodFromString(String payingMethod) {
+        return switch (payingMethod) {
+            case "Card" -> PayingMethod.Card;
+            case "Cash" -> PayingMethod.Cash;
+            default -> null;
+        };
+    }
+
     private Long id;
     /**Expense value in €, EUR*/
     private Double amount;
-    private LocalDateTime date;
+    private Date date;
+    /**Max Lenght 200 characters (sql constraint)*/
     private String description;
-    private ExpenseType category;
+    private ExpenseType expenseType;
     private PayingMethod payingMethod;
 
-    public Expense(Long id, Double amount, LocalDateTime date, String description, ExpenseType category, PayingMethod payingMethod) {
+    public Expense(Long id, Double amount, Date date, String description, ExpenseType expenseType, PayingMethod payingMethod) {
         this.id = id;
         this.amount = amount;
         this.date = date;
         this.description = description;
-        this.category = category;
+        this.expenseType = expenseType;
         this.payingMethod = payingMethod;
     }
 
-    public Expense(Double amount, LocalDateTime date, String description, ExpenseType category, PayingMethod payingMethod) {
-        this(null, amount, date, description, category, payingMethod);
+    public Expense(Double amount, Date date, String description, ExpenseType expenseType, PayingMethod payingMethod) {
+        this(null, amount, date, description, expenseType, payingMethod);
     }
 
     public Long getId() {
@@ -54,11 +75,11 @@ public class Expense {
         this.amount = amount;
     }
 
-    public LocalDateTime getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(LocalDateTime date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 
@@ -70,12 +91,12 @@ public class Expense {
         this.description = description;
     }
 
-    public ExpenseType getCategory() {
-        return category;
+    public ExpenseType getExpenseType() {
+        return expenseType;
     }
 
-    public void setCategory(ExpenseType category) {
-        this.category = category;
+    public void setExpenseType(ExpenseType expenseType) {
+        this.expenseType = expenseType;
     }
 
     public PayingMethod getPayingMethod() {
@@ -91,9 +112,9 @@ public class Expense {
         return "Expense{" +
                 "id=" + id +
                 ", amount=" + amount +
-                ", date=" + date +
+                ", date=" + date.toLocalDate() +
                 ", description='" + description + '\'' +
-                ", category=" + category +
+                ", category=" + expenseType +
                 ", payingMethod=" + payingMethod +
                 '}';
     }
@@ -103,11 +124,11 @@ public class Expense {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Expense expense = (Expense) o;
-        return Objects.equals(getId(), expense.getId()) && Objects.equals(getAmount(), expense.getAmount()) && Objects.equals(getDate(), expense.getDate()) && Objects.equals(getDescription(), expense.getDescription()) && getCategory() == expense.getCategory() && getPayingMethod() == expense.getPayingMethod();
+        return Objects.equals(getId(), expense.getId()) && Objects.equals(getAmount(), expense.getAmount()) && Objects.equals(getDate(), expense.getDate()) && Objects.equals(getDescription(), expense.getDescription()) && getExpenseType() == expense.getExpenseType() && getPayingMethod() == expense.getPayingMethod();
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getAmount(), getDate(), getDescription(), getCategory(), getPayingMethod());
+        return Objects.hash(getId(), getAmount(), getDate(), getDescription(), getExpenseType(), getPayingMethod());
     }
 }
