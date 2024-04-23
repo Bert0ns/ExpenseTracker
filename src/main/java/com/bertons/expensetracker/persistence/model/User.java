@@ -3,12 +3,9 @@ package com.bertons.expensetracker.persistence.model;
 import java.util.Objects;
 
 public class User {
-    Long Id;
-    String username;
-    String password;
-
-    public User() {
-    }
+    private Long Id;
+    private String username;
+    private String password;
 
     public User(Long Id, String username, String password) {
         this.Id = Id;
