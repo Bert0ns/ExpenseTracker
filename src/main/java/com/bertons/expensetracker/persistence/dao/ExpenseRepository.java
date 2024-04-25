@@ -21,7 +21,7 @@ public class ExpenseRepository implements Repository<Expense, Long> {
     }
 
     private void checkTable() {
-        String sql = "DROP TABLE IF EXISTS users; SELECT * FROM expense LIMIT 1";
+        String sql = "SELECT * FROM expense LIMIT 1";
         try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
             ResultSet rs = statement.executeQuery();

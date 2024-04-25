@@ -31,7 +31,7 @@
           </Menu>
         </menus>
       </MenuBar>
-      <TableView fx:id="tableViewExpenses" layoutY="32.0" prefHeight="400.0" prefWidth="852.0">
+      <TableView fx:id="tableViewExpenses" editable="true" layoutY="32.0" prefHeight="400.0" prefWidth="985.0" tableMenuButtonVisible="true">
         <columns>
           <TableColumn fx:id="tableColumnExpenseId" editable="false" prefWidth="150.0" text="Expense id" />
           <TableColumn fx:id="tableColumnAmount" prefWidth="150.0" text="Amount" />
@@ -41,6 +41,6 @@
             <TableColumn fx:id="tableColumnPayingMethod" prefWidth="150.0" text="Paying Method" />
         </columns>
       </TableView>
-      <Button layoutX="954.0" layoutY="86.0" mnemonicParsing="false" onAction="#OnInsertExpenseButton_Click" text="Insert Expense" />
+      <Button layoutX="1021.0" layoutY="58.0" mnemonicParsing="false" onAction="#OnInsertExpenseButton_Click" prefHeight="55.0" prefWidth="115.0" text="Insert Expense" />
    </children>
 </AnchorPane>

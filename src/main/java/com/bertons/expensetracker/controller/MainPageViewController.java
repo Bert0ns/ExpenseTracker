@@ -78,6 +78,7 @@ public class MainPageViewController {
         initializeTableColumnExpenseType();
         initializeTableColumnPayingMethod();
 
+
         FilteredList<Expense> filteredList = new FilteredList<>(expenses, expense -> true);
         SortedList<Expense> sortedList = new SortedList<>(filteredList.sorted(Comparator.comparing(Expense::getDate)));
         sortedList.comparatorProperty().bind(tableViewExpenses.comparatorProperty());
