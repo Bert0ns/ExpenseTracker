@@ -10,31 +10,47 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.stage.FileChooser;
 import javafx.util.Callback;
+import javafx.util.StringConverter;
 import javafx.util.converter.DoubleStringConverter;
+import javafx.util.converter.LocalDateStringConverter;
+import javafx.util.converter.LongStringConverter;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.StreamSupport;
 
 public class MainPageViewController {
-    private final ObservableList<Expense> expenses = FXCollections.observableArrayList();
-
-    private ExpenseRepository expenseRepository;
     @FXML
-    private TableView<Expense> tableViewExpense;
+    private TableColumn<Expense, Long> tableColumnExpenseId;
+    @FXML
+    private TableColumn<Expense, Double> tableColumnAmount;
+    @FXML
+    private TableColumn<Expense, LocalDate> tableColumnDate;
+    @FXML
+    private TableColumn<Expense, String> tableColumnDescription;
+    @FXML
+    private TableColumn<Expense, Expense.ExpenseType> tableColumnExpenseType;
+    @FXML
+    private TableColumn<Expense, Expense.PayingMethod> tableColumnPayingMethod;
+
+    private final ObservableList<Expense> expenses = FXCollections.observableArrayList();
+    private ExpenseRepository expenseRepository;
 
     public void initDataSource(HikariDataSource hikariDataSource) {
         this.expenseRepository = new ExpenseRepository(hikariDataSource);
 
         Iterable<Expense> expensesFound = this.expenseRepository.findAll();
         expenses.addAll(StreamSupport.stream(expensesFound.spliterator(), false).toList());
+        //expenses.addAll(StreamSupport.stream(this.expenseRepository.findAll().spliterator(), false).toList());
     }
 
     public void OnMenuFileCloseButton_Click(ActionEvent actionEvent) {
@@ -47,23 +63,84 @@ public class MainPageViewController {
 
     private void initializeTableViewExpense() {
         System.out.println("Initializing table view expense");
-        List<TableColumn<Expense, ?>> cols = tableViewExpense.getColumns();
 
-        //column "id"
-        //do nothing
+        initializeTableColumnId();
+        initializeTableColumnAmount();
+        initializeTableColumnDate();
+        initializeTableColumnDescription();
+        initializeTableColumnExpenseType();
+        initializeTableColumnPayingMethod();
+    }
+    private void initializeTableColumnId() {
+        tableColumnExpenseId.setCellValueFactory(new PropertyValueFactory<>("expenseId"));
+        tableColumnExpenseId.setCellFactory(TextFieldTableCell.forTableColumn(new LongStringConverter()));
+    }
 
-        //column "amount"
-        //cols.get(1).setCellFactory(TextFieldTableCell.forTableColumn(new DoubleStringConverter()));
-        cols.get(1).setOnEditCommit(event -> {
+    private void initializeTableColumnAmount() {
+        tableColumnAmount.setCellValueFactory(new PropertyValueFactory<>("amount"));
+        tableColumnAmount.setCellFactory(TextFieldTableCell.forTableColumn(new DoubleStringConverter()));
+        tableColumnAmount.setOnEditCommit(event -> {
             Expense selectedExpense = event.getRowValue();
-            selectedExpense.setAmount((Double) event.getNewValue());
+            selectedExpense.setAmount(event.getNewValue());
             expenseRepository.save(selectedExpense);
         });
+    }
 
-        //column "Date"
-        cols.get(2).setOnEditCommit(event -> {
-            Expense selectedExpense = event.getRowValue();
-            selectedExpense.setDescription((String) event.getNewValue());
+    private void initializeTableColumnDate() {
+        tableColumnDate.setCellValueFactory(new PropertyValueFactory<>("date"));
+        tableColumnDate.setCellFactory(TextFieldTableCell.forTableColumn(new LocalDateStringConverter()));
+        tableColumnDate.setOnEditCommit(e ->{
+            Expense selectedExpense = e.getRowValue();
+            selectedExpense.setDate(e.getNewValue());
+            expenseRepository.save(selectedExpense);
+        });
+    }
+
+    private void initializeTableColumnDescription() {
+        tableColumnDescription.setCellValueFactory(new PropertyValueFactory<>("description"));
+        tableColumnDescription.setCellFactory(TextFieldTableCell.forTableColumn());
+        tableColumnDescription.setOnEditCommit(e ->{
+            Expense selectedExpense = e.getRowValue();
+            selectedExpense.setDescription(e.getNewValue());
+            expenseRepository.save(selectedExpense);
+        });
+    }
+
+    private void initializeTableColumnExpenseType(){
+        tableColumnExpenseType.setCellValueFactory(new PropertyValueFactory<>("expenseType"));
+        tableColumnExpenseType.setCellFactory(TextFieldTableCell.forTableColumn(new StringConverter<Expense.ExpenseType>() {
+            @Override
+            public String toString(Expense.ExpenseType expenseType) {
+                return Expense.getStringFromExpenseType(expenseType);
+            }
+
+            @Override
+            public Expense.ExpenseType fromString(String s) {
+                return Expense.getExpenseTypeFromString(s);
+            }
+        }));
+        tableColumnExpenseType.setOnEditCommit(e ->{
+            Expense selectedExpense = e.getRowValue();
+            selectedExpense.setExpenseType(e.getNewValue());
+            expenseRepository.save(selectedExpense);
+        });
+    }
+
+    private void initializeTableColumnPayingMethod(){
+        tableColumnPayingMethod.setCellValueFactory(new PropertyValueFactory<>("payingMethod"));
+        tableColumnPayingMethod.setCellFactory(TextFieldTableCell.forTableColumn(new StringConverter<Expense.PayingMethod>() {
+            @Override
+            public String toString(Expense.PayingMethod expensePayingMethod) {
+                return Expense.getStringFromPayingMethod(expensePayingMethod);
+            }
+            @Override
+            public Expense.PayingMethod fromString(String s) {
+                return Expense.getPayingMethodFromString(s);
+            }
+        }));
+        tableColumnPayingMethod.setOnEditCommit(e ->{
+            Expense selectedExpense = e.getRowValue();
+            selectedExpense.setPayingMethod(e.getNewValue());
             expenseRepository.save(selectedExpense);
         });
     }
