@@ -53,7 +53,6 @@ public class MainPageViewController {
 
         Iterable<Expense> expensesFound = this.expenseRepository.findAll();
         expenses.addAll(StreamSupport.stream(expensesFound.spliterator(), false).toList());
-        //expenses.addAll(StreamSupport.stream(this.expenseRepository.findAll().spliterator(), false).toList());
     }
 
     public void OnMenuFileCloseButton_Click(ActionEvent actionEvent) {
@@ -75,7 +74,6 @@ public class MainPageViewController {
         initializeTableColumnExpenseType();
         initializeTableColumnPayingMethod();
 
-
         FilteredList<Expense> filteredList = new FilteredList<>(expenses, expense -> true);
         SortedList<Expense> sortedList = new SortedList<>(filteredList.sorted(Comparator.comparing(Expense::getDate)));
         sortedList.comparatorProperty().bind(tableViewExpenses.comparatorProperty());
@@ -83,12 +81,10 @@ public class MainPageViewController {
     }
 
     private void initializeTableColumnId() {
-        //tableColumnExpenseId.setCellValueFactory(new PropertyValueFactory<>("id"));
         tableColumnExpenseId.setCellValueFactory(data -> new SimpleObjectProperty<>(data.getValue().getId()));
         tableColumnExpenseId.setCellFactory(TextFieldTableCell.forTableColumn(new LongStringConverter()));
     }
     private void initializeTableColumnAmount() {
-        //tableColumnAmount.setCellValueFactory(new PropertyValueFactory<>("amount"));
         tableColumnAmount.setCellValueFactory(data -> new SimpleObjectProperty<>(data.getValue().getAmount()));
         tableColumnAmount.setCellFactory(TextFieldTableCell.forTableColumn(new DoubleStringConverter()));
         tableColumnAmount.setOnEditCommit(event -> {
@@ -98,7 +94,6 @@ public class MainPageViewController {
         });
     }
     private void initializeTableColumnDate() {
-        //tableColumnDate.setCellValueFactory(new PropertyValueFactory<>("date"));
         tableColumnDate.setCellValueFactory(data -> new SimpleObjectProperty<>(data.getValue().getDate()));
         tableColumnDate.setCellFactory(TextFieldTableCell.forTableColumn(new LocalDateStringConverter()));
         tableColumnDate.setOnEditCommit(e ->{
@@ -108,7 +103,6 @@ public class MainPageViewController {
         });
     }
     private void initializeTableColumnDescription() {
-        //tableColumnDescription.setCellValueFactory(new PropertyValueFactory<>("description"));
         tableColumnDescription.setCellValueFactory(data -> new SimpleObjectProperty<>(data.getValue().getDescription()));
         tableColumnDescription.setCellFactory(TextFieldTableCell.forTableColumn());
         tableColumnDescription.setOnEditCommit(e ->{
@@ -118,7 +112,6 @@ public class MainPageViewController {
         });
     }
     private void initializeTableColumnExpenseType(){
-        //tableColumnExpenseType.setCellValueFactory(new PropertyValueFactory<>("expenseType"));
         tableColumnExpenseType.setCellValueFactory(data -> new SimpleObjectProperty<>(data.getValue().getExpenseType()));
         tableColumnExpenseType.setCellFactory(TextFieldTableCell.forTableColumn(new StringConverter<>() {
             @Override
@@ -138,7 +131,6 @@ public class MainPageViewController {
         });
     }
     private void initializeTableColumnPayingMethod(){
-        //tableColumnPayingMethod.setCellValueFactory(new PropertyValueFactory<>("payingMethod"));
         tableColumnPayingMethod.setCellValueFactory(data -> new SimpleObjectProperty<>(data.getValue().getPayingMethod()));
         tableColumnPayingMethod.setCellFactory(TextFieldTableCell.forTableColumn(new StringConverter<>() {
             @Override
