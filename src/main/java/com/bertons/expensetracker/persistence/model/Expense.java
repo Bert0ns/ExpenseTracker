@@ -59,7 +59,7 @@ public class Expense {
     /**Expense value in €, EUR*/
     private Double amount;
     private LocalDate date;
-    /**Max Lenght 200 characters (sql constraint)*/
+    /**Max Length 200 characters (sql constraint)*/
     private String description;
     private ExpenseType expenseType;
     private PayingMethod payingMethod;

@@ -9,14 +9,12 @@ import com.zaxxer.hikari.HikariDataSource;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.stage.FileChooser;
 import javafx.util.StringConverter;
@@ -29,7 +27,6 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.StreamSupport;
 
 public class MainPageViewController {
@@ -123,7 +120,7 @@ public class MainPageViewController {
     private void initializeTableColumnExpenseType(){
         //tableColumnExpenseType.setCellValueFactory(new PropertyValueFactory<>("expenseType"));
         tableColumnExpenseType.setCellValueFactory(data -> new SimpleObjectProperty<>(data.getValue().getExpenseType()));
-        tableColumnExpenseType.setCellFactory(TextFieldTableCell.forTableColumn(new StringConverter<Expense.ExpenseType>() {
+        tableColumnExpenseType.setCellFactory(TextFieldTableCell.forTableColumn(new StringConverter<>() {
             @Override
             public String toString(Expense.ExpenseType expenseType) {
                 return Expense.getStringFromExpenseType(expenseType);
@@ -143,11 +140,12 @@ public class MainPageViewController {
     private void initializeTableColumnPayingMethod(){
         //tableColumnPayingMethod.setCellValueFactory(new PropertyValueFactory<>("payingMethod"));
         tableColumnPayingMethod.setCellValueFactory(data -> new SimpleObjectProperty<>(data.getValue().getPayingMethod()));
-        tableColumnPayingMethod.setCellFactory(TextFieldTableCell.forTableColumn(new StringConverter<Expense.PayingMethod>() {
+        tableColumnPayingMethod.setCellFactory(TextFieldTableCell.forTableColumn(new StringConverter<>() {
             @Override
             public String toString(Expense.PayingMethod expensePayingMethod) {
                 return Expense.getStringFromPayingMethod(expensePayingMethod);
             }
+
             @Override
             public Expense.PayingMethod fromString(String s) {
                 return Expense.getPayingMethodFromString(s);
@@ -167,9 +165,9 @@ public class MainPageViewController {
         alert.setContentText("""
                 Author:
                 Davide Bertoni
-                    
+                
                 I made this project for the exam
-                    
+                
                 version 0.2
                 """);
         alert.showAndWait();
