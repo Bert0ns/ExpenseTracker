@@ -25,7 +25,7 @@ public class ExpenseRepository implements Repository<Expense, Long> {
         try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
             ResultSet rs = statement.executeQuery();
-            System.out.println(rs);
+            System.out.println(rs.getRow());
         } catch (SQLException e) {
             // Must be disabled in production!
             LOG.info("ExpenseRepository, called initTable()");
@@ -47,6 +47,7 @@ public class ExpenseRepository implements Repository<Expense, Long> {
         try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.executeUpdate();
+            LOG.info("Expense table created");
         } catch (SQLException e) {
             throw new RuntimeException(e.getMessage());
         }
@@ -70,6 +71,7 @@ public class ExpenseRepository implements Repository<Expense, Long> {
 
     @Override
     public Optional<Expense> findById(Long id) {
+        LOG.info("Find expense by id: " + id);
         String sql = "SELECT * FROM expense WHERE id=?";
         try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql))
@@ -88,6 +90,7 @@ public class ExpenseRepository implements Repository<Expense, Long> {
 
     @Override
     public Iterable<Expense> findAll() {
+        LOG.info("Find all expenses");
         String sql = "SELECT * FROM expense";
         List<Expense> expenses = new ArrayList<>();
         try(Connection connection = dataSource.getConnection();
@@ -107,6 +110,7 @@ public class ExpenseRepository implements Repository<Expense, Long> {
 
     @Override
     public Expense save(Expense entity) {
+        LOG.info("Save expense: " + entity);
         if (Objects.isNull(entity.getId())) {
             return insert(entity);
         }
@@ -120,6 +124,7 @@ public class ExpenseRepository implements Repository<Expense, Long> {
     }
 
     private Expense insert(Expense entity) {
+        LOG.info("Insert expense: " + entity);
         String sql = "INSERT INTO expense (amount, transactionDate, description, expenseType, payingMethod) VALUES (?, ?, ?, ?, ?)";
         try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -141,6 +146,7 @@ public class ExpenseRepository implements Repository<Expense, Long> {
     }
 
     private Expense update(Expense entity) {
+        LOG.info("Update expense: " + entity);
         String sql = "UPDATE expense SET amount=?, transactionDate=?, description=?, expenseType=?, payingMethod=? WHERE id=?";
         try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql))
@@ -163,6 +169,7 @@ public class ExpenseRepository implements Repository<Expense, Long> {
 
     @Override
     public void deleteById(Long id) {
+        LOG.info("Delete expense by id: " + id);
         String sql = "DELETE FROM expense WHERE id=?";
         try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql))
@@ -178,6 +185,7 @@ public class ExpenseRepository implements Repository<Expense, Long> {
 
     @Override
     public void deleteAll() {
+        LOG.info("Delete all expenses");
         String sql = "DELETE FROM expense";
         try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql))

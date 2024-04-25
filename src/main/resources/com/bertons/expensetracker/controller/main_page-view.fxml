@@ -11,9 +11,11 @@
    <children>
       <MenuBar layoutX="3.0" layoutY="-2.0" prefHeight="10.0" prefWidth="600.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <menus>
-          <Menu fx:id="MenuFileCloseButton" mnemonicParsing="false" onAction="#OnMenuFileCloseButton_Click" text="File">
+          <Menu mnemonicParsing="false" text="File">
             <items>
-              <MenuItem mnemonicParsing="false" text="Close" />
+              <MenuItem mnemonicParsing="false" onAction="#OnMenuFileCloseButton_Click" text="Close" />
+                  <MenuItem mnemonicParsing="false" onAction="#OnMenuFileImportButton_Click" text="Import" />
+                  <MenuItem mnemonicParsing="false" onAction="#OnMenuFileExportButton_Click" text="Export" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Edit">
@@ -23,14 +25,14 @@
           </Menu>
           <Menu mnemonicParsing="false" text="Help">
             <items>
-              <MenuItem mnemonicParsing="false" text="About" />
+              <MenuItem mnemonicParsing="false" onAction="#OnMenuHelpAboutButton_Click" text="About" />
             </items>
           </Menu>
         </menus>
       </MenuBar>
       <TableView fx:id="tableViewExpense" layoutY="32.0" prefHeight="347.0" prefWidth="1200.0">
         <columns>
-          <TableColumn prefWidth="150.0" text="Expense id" />
+          <TableColumn editable="false" prefWidth="150.0" text="Expense id" />
           <TableColumn prefWidth="150.0" text="Amount" />
             <TableColumn prefWidth="150.0" text="Date" />
             <TableColumn prefWidth="100.0" text="Description" />
