@@ -1,6 +1,6 @@
 package com.bertons.expensetracker.persistence.model;
 
-import java.sql.Date;
+import java.time.LocalDate;
 import java.util.Objects;
 
 public class Expense {
@@ -40,13 +40,13 @@ public class Expense {
     private Long id;
     /**Expense value in €, EUR*/
     private Double amount;
-    private Date date;
+    private LocalDate date;
     /**Max Lenght 200 characters (sql constraint)*/
     private String description;
     private ExpenseType expenseType;
     private PayingMethod payingMethod;
 
-    public Expense(Long id, Double amount, Date date, String description, ExpenseType expenseType, PayingMethod payingMethod) {
+    public Expense(Long id, Double amount, LocalDate date, String description, ExpenseType expenseType, PayingMethod payingMethod) {
         this.id = id;
         this.amount = amount;
         this.date = date;
@@ -55,7 +55,7 @@ public class Expense {
         this.payingMethod = payingMethod;
     }
 
-    public Expense(Double amount, Date date, String description, ExpenseType expenseType, PayingMethod payingMethod) {
+    public Expense(Double amount, LocalDate date, String description, ExpenseType expenseType, PayingMethod payingMethod) {
         this(null, amount, date, description, expenseType, payingMethod);
     }
 
@@ -75,11 +75,11 @@ public class Expense {
         this.amount = amount;
     }
 
-    public Date getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 
@@ -112,7 +112,7 @@ public class Expense {
         return "Expense{" +
                 "id=" + id +
                 ", amount=" + amount +
-                ", date=" + date.toLocalDate() +
+                ", date=" + date +
                 ", description='" + description + '\'' +
                 ", category=" + expenseType +
                 ", payingMethod=" + payingMethod +

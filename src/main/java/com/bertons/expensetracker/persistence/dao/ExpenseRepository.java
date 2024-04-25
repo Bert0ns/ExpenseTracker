@@ -2,6 +2,8 @@ package com.bertons.expensetracker.persistence.dao;
 
 import com.bertons.expensetracker.persistence.model.Expense;
 import com.zaxxer.hikari.HikariDataSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -10,6 +12,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 public class ExpenseRepository implements Repository<Expense, Long> {
+    private static final Logger LOG = LoggerFactory.getLogger(ExpenseRepository.class);
     private final HikariDataSource dataSource;
 
     public ExpenseRepository(HikariDataSource dataSource) {
@@ -25,6 +28,7 @@ public class ExpenseRepository implements Repository<Expense, Long> {
             System.out.println(rs);
         } catch (SQLException e) {
             // Must be disabled in production!
+            LOG.info("ExpenseRepository, called initTable()");
             initTable();
         }
     }
@@ -53,7 +57,7 @@ public class ExpenseRepository implements Repository<Expense, Long> {
         {
             return new Expense(rs.getLong("id"),
                     rs.getDouble("amount"),
-                    rs.getDate("transactionDate"),
+                    rs.getDate("transactionDate").toLocalDate(),
                     rs.getString("description"),
                     Expense.getExpenseTypeFromString(rs.getString("expenseType")),
                     Expense.getPayingMethodFromString(rs.getString("payingMethod")));
@@ -121,7 +125,7 @@ public class ExpenseRepository implements Repository<Expense, Long> {
              PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             statement.setDouble(1, entity.getAmount());
-            statement.setDate(2, entity.getDate());
+            statement.setDate(2, Date.valueOf(entity.getDate()));
             statement.setString(3, entity.getDescription());
             statement.setString(4, entity.getExpenseType().toString());
             statement.setString(5, entity.getPayingMethod().toString());
@@ -142,7 +146,7 @@ public class ExpenseRepository implements Repository<Expense, Long> {
              PreparedStatement statement = connection.prepareStatement(sql))
         {
             statement.setDouble(1, entity.getAmount());
-            statement.setDate(2, entity.getDate());
+            statement.setDate(2, Date.valueOf(entity.getDate()));
             statement.setString(3, entity.getDescription());
             statement.setString(4, entity.getExpenseType().toString());
             statement.setString(5, entity.getPayingMethod().toString());
