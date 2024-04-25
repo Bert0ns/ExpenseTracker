@@ -7,16 +7,18 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.zaxxer.hikari.HikariDataSource;
 import javafx.application.Platform;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.stage.FileChooser;
-import javafx.util.Callback;
 import javafx.util.StringConverter;
 import javafx.util.converter.DoubleStringConverter;
 import javafx.util.converter.LocalDateStringConverter;
@@ -25,10 +27,14 @@ import javafx.util.converter.LongStringConverter;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.StreamSupport;
 
 public class MainPageViewController {
+    @FXML
+    private TableView<Expense> tableViewExpenses;
     @FXML
     private TableColumn<Expense, Long> tableColumnExpenseId;
     @FXML
@@ -63,6 +69,7 @@ public class MainPageViewController {
 
     private void initializeTableViewExpense() {
         System.out.println("Initializing table view expense");
+        tableViewExpenses.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
         initializeTableColumnId();
         initializeTableColumnAmount();
@@ -70,14 +77,21 @@ public class MainPageViewController {
         initializeTableColumnDescription();
         initializeTableColumnExpenseType();
         initializeTableColumnPayingMethod();
-    }
-    private void initializeTableColumnId() {
-        tableColumnExpenseId.setCellValueFactory(new PropertyValueFactory<>("expenseId"));
-        tableColumnExpenseId.setCellFactory(TextFieldTableCell.forTableColumn(new LongStringConverter()));
+
+        FilteredList<Expense> filteredList = new FilteredList<>(expenses, expense -> true);
+        SortedList<Expense> sortedList = new SortedList<>(filteredList.sorted(Comparator.comparing(Expense::getDate)));
+        sortedList.comparatorProperty().bind(tableViewExpenses.comparatorProperty());
+        tableViewExpenses.setItems(sortedList);
     }
 
+    private void initializeTableColumnId() {
+        //tableColumnExpenseId.setCellValueFactory(new PropertyValueFactory<>("id"));
+        tableColumnExpenseId.setCellValueFactory(data -> new SimpleObjectProperty<>(data.getValue().getId()));
+        tableColumnExpenseId.setCellFactory(TextFieldTableCell.forTableColumn(new LongStringConverter()));
+    }
     private void initializeTableColumnAmount() {
-        tableColumnAmount.setCellValueFactory(new PropertyValueFactory<>("amount"));
+        //tableColumnAmount.setCellValueFactory(new PropertyValueFactory<>("amount"));
+        tableColumnAmount.setCellValueFactory(data -> new SimpleObjectProperty<>(data.getValue().getAmount()));
         tableColumnAmount.setCellFactory(TextFieldTableCell.forTableColumn(new DoubleStringConverter()));
         tableColumnAmount.setOnEditCommit(event -> {
             Expense selectedExpense = event.getRowValue();
@@ -85,9 +99,9 @@ public class MainPageViewController {
             expenseRepository.save(selectedExpense);
         });
     }
-
     private void initializeTableColumnDate() {
-        tableColumnDate.setCellValueFactory(new PropertyValueFactory<>("date"));
+        //tableColumnDate.setCellValueFactory(new PropertyValueFactory<>("date"));
+        tableColumnDate.setCellValueFactory(data -> new SimpleObjectProperty<>(data.getValue().getDate()));
         tableColumnDate.setCellFactory(TextFieldTableCell.forTableColumn(new LocalDateStringConverter()));
         tableColumnDate.setOnEditCommit(e ->{
             Expense selectedExpense = e.getRowValue();
@@ -95,9 +109,9 @@ public class MainPageViewController {
             expenseRepository.save(selectedExpense);
         });
     }
-
     private void initializeTableColumnDescription() {
-        tableColumnDescription.setCellValueFactory(new PropertyValueFactory<>("description"));
+        //tableColumnDescription.setCellValueFactory(new PropertyValueFactory<>("description"));
+        tableColumnDescription.setCellValueFactory(data -> new SimpleObjectProperty<>(data.getValue().getDescription()));
         tableColumnDescription.setCellFactory(TextFieldTableCell.forTableColumn());
         tableColumnDescription.setOnEditCommit(e ->{
             Expense selectedExpense = e.getRowValue();
@@ -105,9 +119,9 @@ public class MainPageViewController {
             expenseRepository.save(selectedExpense);
         });
     }
-
     private void initializeTableColumnExpenseType(){
-        tableColumnExpenseType.setCellValueFactory(new PropertyValueFactory<>("expenseType"));
+        //tableColumnExpenseType.setCellValueFactory(new PropertyValueFactory<>("expenseType"));
+        tableColumnExpenseType.setCellValueFactory(data -> new SimpleObjectProperty<>(data.getValue().getExpenseType()));
         tableColumnExpenseType.setCellFactory(TextFieldTableCell.forTableColumn(new StringConverter<Expense.ExpenseType>() {
             @Override
             public String toString(Expense.ExpenseType expenseType) {
@@ -119,15 +133,15 @@ public class MainPageViewController {
                 return Expense.getExpenseTypeFromString(s);
             }
         }));
-        tableColumnExpenseType.setOnEditCommit(e ->{
+        tableColumnExpenseType.setOnEditCommit(e -> {
             Expense selectedExpense = e.getRowValue();
             selectedExpense.setExpenseType(e.getNewValue());
             expenseRepository.save(selectedExpense);
         });
     }
-
     private void initializeTableColumnPayingMethod(){
-        tableColumnPayingMethod.setCellValueFactory(new PropertyValueFactory<>("payingMethod"));
+        //tableColumnPayingMethod.setCellValueFactory(new PropertyValueFactory<>("payingMethod"));
+        tableColumnPayingMethod.setCellValueFactory(data -> new SimpleObjectProperty<>(data.getValue().getPayingMethod()));
         tableColumnPayingMethod.setCellFactory(TextFieldTableCell.forTableColumn(new StringConverter<Expense.PayingMethod>() {
             @Override
             public String toString(Expense.PayingMethod expensePayingMethod) {
@@ -197,5 +211,17 @@ public class MainPageViewController {
                 new Alert(Alert.AlertType.ERROR, e.getMessage(), ButtonType.OK).showAndWait();
             }
         }
+    }
+
+    public void OnInsertExpenseButton_Click(ActionEvent actionEvent) throws IOException {
+        new AddExpenseDialog().showAndWait().ifPresent(expense -> {
+            try {
+                Expense saved = expenseRepository.save(expense);
+                expenses.add(saved);
+                System.out.println(saved);
+            } catch (RuntimeException e) {
+                new Alert(Alert.AlertType.ERROR, e.getMessage(), ButtonType.OK).showAndWait();
+            }
+        });
     }
 }
