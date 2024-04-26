@@ -180,11 +180,26 @@ public class MainPageViewController {
                 });
                 for (Expense expense : tmp) {
                     Expense saved = expenseRepository.save(expense);
-                    expenses.add(saved);
+
+                    insertIntoExpensesNoDuplicates(saved);
                 }
             } catch (IOException e) {
                 new Alert(Alert.AlertType.ERROR, e.getMessage(), ButtonType.OK).showAndWait();
             }
+        }
+    }
+
+    private void insertIntoExpensesNoDuplicates(Expense toSave) {
+        boolean canBeSaved = true;
+        for(Expense e : expenses)
+        {
+            if (e.equals(toSave)) {
+                canBeSaved = false;
+                break;
+            }
+        }
+        if (canBeSaved) {
+            expenses.add(toSave);
         }
     }
 
