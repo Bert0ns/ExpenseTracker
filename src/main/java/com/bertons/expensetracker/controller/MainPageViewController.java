@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.StreamSupport;
 
 public class MainPageViewController {
@@ -45,7 +46,7 @@ public class MainPageViewController {
     @FXML
     private TableColumn<Expense, Expense.PayingMethod> tableColumnPayingMethod;
 
-    private final ObservableList<Expense> expenses = FXCollections.observableArrayList();
+    private ObservableList<Expense> expenses = FXCollections.observableArrayList();
     private ExpenseRepository expenseRepository;
 
     public void initDataSource(HikariDataSource hikariDataSource) {
@@ -177,8 +178,8 @@ public class MainPageViewController {
             try {
                 List<Expense> tmp = mapper.readValue(file, new TypeReference<>() {
                 });
-                for (Expense plane : tmp) {
-                    Expense saved = expenseRepository.save(plane);
+                for (Expense expense : tmp) {
+                    Expense saved = expenseRepository.save(expense);
                     expenses.add(saved);
                 }
             } catch (IOException e) {
@@ -187,17 +188,18 @@ public class MainPageViewController {
         }
     }
 
-    public void OnMenuFileExportButton_Click(ActionEvent actionEvent) {
+    public void OnMenuFileExportButton_Click(ActionEvent actionEvent) throws IOException {
         System.out.println("Exporting expenses from table");
         FileChooser fileChooser = new FileChooser();
         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("JSON files (*.json)", "*.json");
         fileChooser.getExtensionFilters().add(extFilter);
         File file = fileChooser.showSaveDialog(null);
-        if (file != null) {
+        if (Objects.nonNull(file)) {
             try {
                 ObjectMapper mapper = new ObjectMapper();
                 mapper.registerModule(new JavaTimeModule());
                 mapper.writerWithDefaultPrettyPrinter().writeValue(file, expenses);
+
             } catch (IOException e) {
                 new Alert(Alert.AlertType.ERROR, e.getMessage(), ButtonType.OK).showAndWait();
             }
@@ -214,5 +216,17 @@ public class MainPageViewController {
                 new Alert(Alert.AlertType.ERROR, e.getMessage(), ButtonType.OK).showAndWait();
             }
         });
+    }
+
+    public void OnDeleteExpenseButton_Click(ActionEvent actionEvent) {
+        Expense selectedItem = tableViewExpenses.getSelectionModel().getSelectedItem();
+        if (selectedItem != null) {
+            try {
+                expenseRepository.deleteById(selectedItem.getId());
+                expenses.remove(selectedItem);
+            } catch (RuntimeException e) {
+                new Alert(Alert.AlertType.ERROR, e.getMessage(), ButtonType.OK).showAndWait();
+            }
+        }
     }
 }

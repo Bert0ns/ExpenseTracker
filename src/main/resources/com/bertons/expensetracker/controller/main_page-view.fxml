@@ -21,7 +21,8 @@
           </Menu>
           <Menu mnemonicParsing="false" text="Edit">
             <items>
-              <MenuItem mnemonicParsing="false" text="Delete" />
+                  <MenuItem mnemonicParsing="false" onAction="#OnInsertExpenseButton_Click" text="Insert Expense" />
+              <MenuItem mnemonicParsing="false" onAction="#OnDeleteExpenseButton_Click" text="Delete Expense" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Help">
@@ -33,7 +34,7 @@
       </MenuBar>
       <TableView fx:id="tableViewExpenses" editable="true" layoutY="32.0" prefHeight="400.0" prefWidth="985.0" tableMenuButtonVisible="true">
         <columns>
-          <TableColumn fx:id="tableColumnExpenseId" editable="false" prefWidth="150.0" text="Expense id" />
+          <TableColumn fx:id="tableColumnExpenseId" editable="false" prefWidth="100.0" text="Expense id" />
           <TableColumn fx:id="tableColumnAmount" prefWidth="150.0" text="Amount" />
             <TableColumn fx:id="tableColumnDate" prefWidth="150.0" text="Date" />
             <TableColumn fx:id="tableColumnDescription" prefWidth="100.0" text="Description" />
@@ -42,5 +43,6 @@
         </columns>
       </TableView>
       <Button layoutX="1021.0" layoutY="58.0" mnemonicParsing="false" onAction="#OnInsertExpenseButton_Click" prefHeight="55.0" prefWidth="115.0" text="Insert Expense" />
+      <Button layoutX="1021.0" layoutY="140.0" mnemonicParsing="false" onAction="#OnDeleteExpenseButton_Click" prefHeight="55.0" prefWidth="121.0" text="Delete Expense" />
    </children>
 </AnchorPane>
