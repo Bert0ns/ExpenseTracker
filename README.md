@@ -15,6 +15,5 @@ The expenses are saved through a database
 * Income tracking
 * Graphs
 * UI elements
-* Input controls when you insert an expense
-* Table view editing
-* Insert default options in the insert expense menu
+
+

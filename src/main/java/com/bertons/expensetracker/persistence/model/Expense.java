@@ -37,6 +37,7 @@ public class Expense {
             case Groceries -> "Groceries";
             case Debt -> "Debt";
             case Car -> "Car";
+            default -> null;
         };
     }
 

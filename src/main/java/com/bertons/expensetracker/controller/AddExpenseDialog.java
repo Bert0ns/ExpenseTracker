@@ -7,6 +7,8 @@ import javafx.scene.control.*;
 import javafx.stage.Modality;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class AddExpenseDialog extends Dialog<Expense> {
 
@@ -24,6 +26,8 @@ public class AddExpenseDialog extends Dialog<Expense> {
         comboBoxPayingMethod.getItems().removeAll();
         comboBoxPayingMethod.getItems().addAll(Expense.PayingMethod.values());
         comboBoxPayingMethod.getSelectionModel().select(Expense.PayingMethod.Cash);
+
+        datePickerExpenseDate.setValue(LocalDate.now());
     }
 
     public AddExpenseDialog() throws IOException {
@@ -38,7 +42,24 @@ public class AddExpenseDialog extends Dialog<Expense> {
 
         setResultConverter(buttonType -> {
             if (buttonType == ButtonType.APPLY) {
-                return new Expense(Double.parseDouble(textFieldAmount.getText()),
+                double amount = 0;
+                try{
+                    amount = Double.parseDouble(textFieldAmount.getText());
+                } catch (Exception e)
+                {
+                    new Alert(Alert.AlertType.ERROR, "There seems to be an error in the \"Amount\" input field: \n" + e.getMessage(), ButtonType.OK).showAndWait();
+
+                    try {
+                        AtomicReference<Expense> exp = new AtomicReference<>();
+                        new AddExpenseDialog().showAndWait().ifPresent(exp::set);
+                        return exp.get();
+                    } catch (IOException ex) {
+                        new Alert(Alert.AlertType.ERROR, e.getMessage(), ButtonType.OK).showAndWait();
+                    }
+                    return null;
+                }
+
+                return new Expense(amount,
                         datePickerExpenseDate.getValue(),
                         textFieldDescription.getText(),
                         comboBoxExpenseType.getValue(),
