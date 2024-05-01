@@ -46,7 +46,7 @@ public class MainPageViewController {
     @FXML
     private TableColumn<Expense, Expense.PayingMethod> tableColumnPayingMethod;
 
-    private ObservableList<Expense> expenses = FXCollections.observableArrayList();
+    private final ObservableList<Expense> expenses = FXCollections.observableArrayList();
     private ExpenseRepository expenseRepository;
 
     public void initDataSource(HikariDataSource hikariDataSource) {
@@ -188,9 +188,8 @@ public class MainPageViewController {
                 List<Expense> tmp = mapper.readValue(file, new TypeReference<>() {
                 });
                 for (Expense expense : tmp) {
-                    Expense saved = expenseRepository.save(expense);
+                    expenseRepository.save(expense);
                 }
-
                 updateExpenses();
             } catch (IOException e) {
                 new Alert(Alert.AlertType.ERROR, e.getMessage(), ButtonType.OK).showAndWait();
@@ -198,7 +197,7 @@ public class MainPageViewController {
         }
     }
 
-    public void OnMenuFileExportButton_Click(ActionEvent actionEvent) throws IOException {
+    public void OnMenuFileExportButton_Click(ActionEvent actionEvent) {
         System.out.println("Exporting expenses from table");
         FileChooser fileChooser = new FileChooser();
         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("JSON files (*.json)", "*.json");
