@@ -51,9 +51,7 @@ public class MainPageViewController {
 
     public void initDataSource(HikariDataSource hikariDataSource) {
         this.expenseRepository = new ExpenseRepository(hikariDataSource);
-
-        Iterable<Expense> expensesFound = this.expenseRepository.findAll();
-        expenses.addAll(StreamSupport.stream(expensesFound.spliterator(), false).toList());
+        updateExpenses();
     }
 
     public void OnMenuFileCloseButton_Click(ActionEvent actionEvent) {
@@ -62,6 +60,17 @@ public class MainPageViewController {
 
     public void initialize() {
         initializeTableViewExpense();
+    }
+
+    private void updateExpenses()
+    {
+        try {
+            Iterable<Expense> expensesFound = this.expenseRepository.findAll();
+            expenses.clear();
+            expenses.addAll(StreamSupport.stream(expensesFound.spliterator(), false).toList());
+        } catch (Exception e) {
+            new Alert(Alert.AlertType.ERROR, e.getMessage(), ButtonType.OK).showAndWait();
+        }
     }
 
     private void initializeTableViewExpense() {
@@ -180,26 +189,12 @@ public class MainPageViewController {
                 });
                 for (Expense expense : tmp) {
                     Expense saved = expenseRepository.save(expense);
-
-                    insertIntoExpensesNoDuplicates(saved);
                 }
+
+                updateExpenses();
             } catch (IOException e) {
                 new Alert(Alert.AlertType.ERROR, e.getMessage(), ButtonType.OK).showAndWait();
             }
-        }
-    }
-
-    private void insertIntoExpensesNoDuplicates(Expense toSave) {
-        boolean canBeSaved = true;
-        for(Expense e : expenses)
-        {
-            if (e.equals(toSave)) {
-                canBeSaved = false;
-                break;
-            }
-        }
-        if (canBeSaved) {
-            expenses.add(toSave);
         }
     }
 
