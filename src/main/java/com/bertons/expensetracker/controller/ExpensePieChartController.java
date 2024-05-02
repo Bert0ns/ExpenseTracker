@@ -91,7 +91,7 @@ public class ExpensePieChartController {
     }
 
     public void OnMenuFileCloseButton_Click(ActionEvent actionEvent) {
-
+        payingMethodsPieChart.getScene().getWindow().hide();
     }
 
     public void OnMenuHelpAboutButton_Click(ActionEvent actionEvent) {
