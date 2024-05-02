@@ -23,9 +23,12 @@
               </menus>
             </MenuBar>
          </top>
-         <center>
-            <PieChart fx:id="expenseAmountPieChart" title="Amount" BorderPane.alignment="CENTER" />
-         </center>
+         <right>
+            <PieChart fx:id="payingMethodsPieChart" title="Paying Methods" BorderPane.alignment="CENTER" />
+         </right>
+         <left>
+            <PieChart fx:id="expenseTypesPieChart" title="Expense Types" BorderPane.alignment="CENTER" />
+         </left>
       </BorderPane>
    </children>
 </AnchorPane>

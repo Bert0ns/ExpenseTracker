@@ -10,46 +10,84 @@ import javafx.scene.control.Alert;
 
 public class ExpensePieChartController {
     @FXML
-    private PieChart expenseAmountPieChart;
+    private PieChart payingMethodsPieChart;
+    @FXML
+    private PieChart expenseTypesPieChart;
 
-    ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
+    ObservableList<PieChart.Data> expenseTypesPieChartData = FXCollections.observableArrayList();
+    ObservableList<PieChart.Data> payingMethodsPieChartData = FXCollections.observableArrayList();
 
-    private void initPieChartData() {
-        pieChartData.clear();
-        pieChartData.add(new PieChart.Data(Expense.ExpenseType.Miscellaneous.toString(), 0));
-        pieChartData.add(new PieChart.Data(Expense.ExpenseType.Car.toString(), 0));
-        pieChartData.add(new PieChart.Data(Expense.ExpenseType.Debt.toString(), 0));
-        pieChartData.add(new PieChart.Data(Expense.ExpenseType.EatingOut.toString(), 0));
-        pieChartData.add(new PieChart.Data(Expense.ExpenseType.Groceries.toString(), 0));
-        pieChartData.add(new PieChart.Data(Expense.ExpenseType.Subscription.toString(), 0));
+    public void initPieCharts(ObservableList<Expense> expensesData) {
+        initExpenseTypesPieChartData();
+        insertDataIntoExpenseTypesPieChartData(expensesData);
+        expenseTypesPieChart.getData().setAll(expenseTypesPieChartData);
+
+        initPayingMethodsPieChartData();
+        insertDataIntoPayingMethodsPieChartData(expensesData);
+        payingMethodsPieChart.getData().setAll(payingMethodsPieChartData);
     }
 
-    public void initPieChart(ObservableList<Expense> expensesData)
-    {
-        initPieChartData();
+    public void updateExpenseTypesPieChartData(ObservableList<Expense> expensesData) {
+        expenseTypesPieChartData.get(0).setPieValue(0);
+        expenseTypesPieChartData.get(1).setPieValue(0);
+        expenseTypesPieChartData.get(2).setPieValue(0);
+        expenseTypesPieChartData.get(3).setPieValue(0);
+        expenseTypesPieChartData.get(4).setPieValue(0);
+        expenseTypesPieChartData.get(5).setPieValue(0);
+        insertDataIntoExpenseTypesPieChartData(expensesData);
+    }
+    public void updatePayingMethodPieChartData(ObservableList<Expense> expensesData) {
+        payingMethodsPieChartData.get(0).setPieValue(0);
+        payingMethodsPieChartData.get(1).setPieValue(0);
+        insertDataIntoPayingMethodsPieChartData(expensesData);
+    }
+
+    private void initExpenseTypesPieChartData() {
+        expenseTypesPieChartData.clear();
+        expenseTypesPieChartData.add(new PieChart.Data(Expense.ExpenseType.Miscellaneous.toString(), 0));
+        expenseTypesPieChartData.add(new PieChart.Data(Expense.ExpenseType.Car.toString(), 0));
+        expenseTypesPieChartData.add(new PieChart.Data(Expense.ExpenseType.Debt.toString(), 0));
+        expenseTypesPieChartData.add(new PieChart.Data(Expense.ExpenseType.EatingOut.toString(), 0));
+        expenseTypesPieChartData.add(new PieChart.Data(Expense.ExpenseType.Groceries.toString(), 0));
+        expenseTypesPieChartData.add(new PieChart.Data(Expense.ExpenseType.Subscription.toString(), 0));
+    }
+    private void initPayingMethodsPieChartData() {
+        payingMethodsPieChartData.clear();
+        payingMethodsPieChartData.add(new PieChart.Data(Expense.PayingMethod.Cash.toString(), 0));
+        payingMethodsPieChartData.add(new PieChart.Data(Expense.PayingMethod.Card.toString(), 0));
+    }
+
+    private void insertDataIntoExpenseTypesPieChartData(ObservableList<Expense> expensesData) {
         for (Expense expense : expensesData) {
             switch (expense.getExpenseType()) {
                 case Miscellaneous:
-                    pieChartData.get(0).setPieValue(pieChartData.get(0).getPieValue() + expense.getAmount());
+                    expenseTypesPieChartData.get(0).setPieValue(expenseTypesPieChartData.get(0).getPieValue() + expense.getAmount());
                     break;
                 case Car:
-                    pieChartData.get(1).setPieValue(pieChartData.get(1).getPieValue() + expense.getAmount());
+                    expenseTypesPieChartData.get(1).setPieValue(expenseTypesPieChartData.get(1).getPieValue() + expense.getAmount());
                     break;
                 case Debt:
-                    pieChartData.get(2).setPieValue(pieChartData.get(2).getPieValue() + expense.getAmount());
+                    expenseTypesPieChartData.get(2).setPieValue(expenseTypesPieChartData.get(2).getPieValue() + expense.getAmount());
                     break;
                 case EatingOut:
-                    pieChartData.get(3).setPieValue(pieChartData.get(3).getPieValue() + expense.getAmount());
+                    expenseTypesPieChartData.get(3).setPieValue(expenseTypesPieChartData.get(3).getPieValue() + expense.getAmount());
                     break;
                 case Groceries:
-                    pieChartData.get(4).setPieValue(pieChartData.get(4).getPieValue() + expense.getAmount());
+                    expenseTypesPieChartData.get(4).setPieValue(expenseTypesPieChartData.get(4).getPieValue() + expense.getAmount());
                     break;
                 case Subscription:
-                    pieChartData.get(5).setPieValue(pieChartData.get(5).getPieValue() + expense.getAmount());
+                    expenseTypesPieChartData.get(5).setPieValue(expenseTypesPieChartData.get(5).getPieValue() + expense.getAmount());
                     break;
             }
         }
-        expenseAmountPieChart.getData().setAll(pieChartData);
+    }
+    private void insertDataIntoPayingMethodsPieChartData(ObservableList<Expense> expensesData) {
+        for (Expense expense : expensesData) {
+            switch (expense.getPayingMethod()) {
+                case Cash -> payingMethodsPieChartData.get(0).setPieValue(payingMethodsPieChartData.get(0).getPieValue() + expense.getAmount());
+                case Card -> payingMethodsPieChartData.get(1).setPieValue(payingMethodsPieChartData.get(1).getPieValue() + expense.getAmount());
+            }
+        }
     }
 
     public void OnMenuFileCloseButton_Click(ActionEvent actionEvent) {

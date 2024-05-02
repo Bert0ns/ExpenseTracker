@@ -7,10 +7,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.zaxxer.hikari.HikariDataSource;
 import javafx.application.Platform;
-import javafx.beans.Observable;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
@@ -210,7 +208,8 @@ public class MainPageViewController {
         }
 
         updateExpenses();
-        expensePieChartController.initPieChart(expenses);
+        expensePieChartController.updateExpenseTypesPieChartData(expenses);
+        expensePieChartController.updatePayingMethodPieChartData(expenses);
     }
 
     public void OnMenuHelpAboutButton_Click(ActionEvent actionEvent) {
@@ -300,7 +299,8 @@ public class MainPageViewController {
         Parent root = loader.load();
         expensePieChartController = loader.getController();
 
-        updatePieChart();
+        updateExpenses();
+        expensePieChartController.initPieCharts(expenses);
 
         Stage stage = new Stage();
         Scene scene = new Scene(root);
