@@ -7,8 +7,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.zaxxer.hikari.HikariDataSource;
 import javafx.application.Platform;
+import javafx.beans.Observable;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
@@ -52,6 +54,8 @@ public class MainPageViewController {
 
     private final ObservableList<Expense> expenses = FXCollections.observableArrayList();
     private ExpenseRepository expenseRepository;
+
+    private ExpensePieChartController expensePieChartController;
 
     public void initDataSource(HikariDataSource hikariDataSource) {
         this.expenseRepository = new ExpenseRepository(hikariDataSource);
@@ -115,8 +119,12 @@ public class MainPageViewController {
             {
                 selectedExpense.setAmount(event.getNewValue());
                 expenseRepository.save(selectedExpense);
+                updatePieChart();
             }
-            updateExpenses();
+            else
+            {
+                updateExpenses();
+            }
         });
     }
     private void initializeTableColumnDate() {
@@ -129,7 +137,10 @@ public class MainPageViewController {
                 selectedExpense.setDate(e.getNewValue());
                 expenseRepository.save(selectedExpense);
             }
-            updateExpenses();
+            else
+            {
+                updateExpenses();
+            }
         });
     }
     private void initializeTableColumnDescription() {
@@ -163,6 +174,7 @@ public class MainPageViewController {
             Expense selectedExpense = e.getRowValue();
             selectedExpense.setExpenseType(e.getNewValue());
             expenseRepository.save(selectedExpense);
+            updatePieChart();
         });
     }
     private void initializeTableColumnPayingMethod(){
@@ -187,7 +199,18 @@ public class MainPageViewController {
             Expense selectedExpense = e.getRowValue();
             selectedExpense.setPayingMethod(e.getNewValue());
             expenseRepository.save(selectedExpense);
+            updatePieChart();
         });
+    }
+
+    private void updatePieChart() {
+        if(Objects.isNull(expensePieChartController))
+        {
+            return;
+        }
+
+        updateExpenses();
+        expensePieChartController.initPieChart(expenses);
     }
 
     public void OnMenuHelpAboutButton_Click(ActionEvent actionEvent) {
@@ -225,6 +248,7 @@ public class MainPageViewController {
                 new Alert(Alert.AlertType.ERROR, e.getMessage(), ButtonType.OK).showAndWait();
             }
         }
+        updatePieChart();
     }
 
     public void OnMenuFileExportButton_Click(ActionEvent actionEvent) {
@@ -250,7 +274,8 @@ public class MainPageViewController {
             try {
                 Expense saved = expenseRepository.save(expense);
                 expenses.add(saved);
-                System.out.println(saved);
+
+                updatePieChart();
             } catch (RuntimeException e) {
                 new Alert(Alert.AlertType.ERROR, e.getMessage(), ButtonType.OK).showAndWait();
             }
@@ -263,6 +288,7 @@ public class MainPageViewController {
             try {
                 expenseRepository.deleteById(selectedItem.getId());
                 expenses.remove(selectedItem);
+                updatePieChart();
             } catch (RuntimeException e) {
                 new Alert(Alert.AlertType.ERROR, e.getMessage(), ButtonType.OK).showAndWait();
             }
@@ -272,17 +298,18 @@ public class MainPageViewController {
     public void OnMenuViewPieChartButton_Click(ActionEvent actionEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("expense-pie-chart-view.fxml"));
         Parent root = loader.load();
-        ExpensePieChartController controller = loader.getController();
-        controller.initPieChart(expenses);
+        expensePieChartController = loader.getController();
 
-        /*Stage stage = (Stage) anchorPane.getScene().getWindow();
+        updatePieChart();
+
+        Stage stage = new Stage();
         Scene scene = new Scene(root);
-        stage.setTitle("Your Expense Tracker");
+        stage.setTitle("Expense Pie Chart");
         stage.setScene(scene);
-
-         */
+        stage.show();
     }
 
     public void OnMenuViewBarChartButton_Click(ActionEvent actionEvent) {
+
     }
 }

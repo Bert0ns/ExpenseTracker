@@ -15,8 +15,7 @@ public class ExpensePieChartController {
 
     ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
 
-    public void initPieChart(ObservableList<Expense> expensesData)
-    {
+    private void initPieChartData() {
         pieChartData.clear();
         pieChartData.add(new PieChart.Data(Expense.ExpenseType.Miscellaneous.toString(), 0));
         pieChartData.add(new PieChart.Data(Expense.ExpenseType.Car.toString(), 0));
@@ -24,7 +23,11 @@ public class ExpensePieChartController {
         pieChartData.add(new PieChart.Data(Expense.ExpenseType.EatingOut.toString(), 0));
         pieChartData.add(new PieChart.Data(Expense.ExpenseType.Groceries.toString(), 0));
         pieChartData.add(new PieChart.Data(Expense.ExpenseType.Subscription.toString(), 0));
+    }
 
+    public void initPieChart(ObservableList<Expense> expensesData)
+    {
+        initPieChartData();
         for (Expense expense : expensesData) {
             switch (expense.getExpenseType()) {
                 case Miscellaneous:
@@ -47,12 +50,11 @@ public class ExpensePieChartController {
                     break;
             }
         }
-        expensePieChart.getData().removeAll();
-        expensePieChart.getData().addAll(pieChartData);
+        expensePieChart.getData().setAll(pieChartData);
     }
 
     public void OnMenuFileCloseButton_Click(ActionEvent actionEvent) {
-        Platform.exit();
+
     }
 
     public void OnMenuHelpAboutButton_Click(ActionEvent actionEvent) {

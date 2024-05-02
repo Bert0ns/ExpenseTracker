@@ -24,7 +24,7 @@
             </MenuBar>
          </top>
          <center>
-            <PieChart fx:id="expensePieChart" title="Expenses" BorderPane.alignment="CENTER" />
+            <PieChart fx:id="expensePieChart" title="Amount" BorderPane.alignment="CENTER" />
          </center>
       </BorderPane>
    </children>
