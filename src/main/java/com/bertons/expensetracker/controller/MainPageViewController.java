@@ -14,9 +14,13 @@ import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import javafx.util.StringConverter;
 import javafx.util.converter.DoubleStringConverter;
 import javafx.util.converter.LocalDateStringConverter;
@@ -265,7 +269,18 @@ public class MainPageViewController {
         }
     }
 
-    public void OnMenuViewPieChartButton_Click(ActionEvent actionEvent) {
+    public void OnMenuViewPieChartButton_Click(ActionEvent actionEvent) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("expense-pie-chart-view.fxml"));
+        Parent root = loader.load();
+        ExpensePieChartController controller = loader.getController();
+        controller.initPieChart(expenses);
+
+        /*Stage stage = (Stage) anchorPane.getScene().getWindow();
+        Scene scene = new Scene(root);
+        stage.setTitle("Your Expense Tracker");
+        stage.setScene(scene);
+
+         */
     }
 
     public void OnMenuViewBarChartButton_Click(ActionEvent actionEvent) {
