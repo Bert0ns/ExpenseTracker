@@ -29,30 +29,11 @@ public class Expense {
         };
     }
 
-    public static String getStringFromExpenseType(ExpenseType expenseType) {
-        return switch (expenseType) {
-            case Miscellaneous -> "Miscellaneous";
-            case Subscription -> "Subscription";
-            case EatingOut -> "EatingOut";
-            case Groceries -> "Groceries";
-            case Debt -> "Debt";
-            case Car -> "Car";
-            default -> null;
-        };
-    }
-
     public static PayingMethod getPayingMethodFromString(String payingMethod) {
         return switch (payingMethod) {
             case "Card" -> PayingMethod.Card;
             case "Cash" -> PayingMethod.Cash;
             default -> null;
-        };
-    }
-
-    public static String getStringFromPayingMethod(PayingMethod payingMethod) {
-        return switch (payingMethod) {
-            case Card -> "Card";
-            case Cash -> "Cash";
         };
     }
 

@@ -155,7 +155,7 @@ public class MainPageViewController {
         tableColumnExpenseType.setCellFactory(TextFieldTableCell.forTableColumn(new StringConverter<>() {
             @Override
             public String toString(Expense.ExpenseType expenseType) {
-                return Expense.getStringFromExpenseType(expenseType);
+                return expenseType.toString();
             }
 
             @Override
@@ -180,7 +180,7 @@ public class MainPageViewController {
         tableColumnPayingMethod.setCellFactory(TextFieldTableCell.forTableColumn(new StringConverter<>() {
             @Override
             public String toString(Expense.PayingMethod expensePayingMethod) {
-                return Expense.getStringFromPayingMethod(expensePayingMethod);
+                return expensePayingMethod.toString();
             }
 
             @Override
@@ -304,8 +304,9 @@ public class MainPageViewController {
 
         Stage stage = new Stage();
         Scene scene = new Scene(root);
-        stage.setTitle("Expense Pie Chart");
         stage.setScene(scene);
+        stage.setTitle("Expense Pie Chart");
+        stage.setResizable(false);
         stage.show();
     }
 
