@@ -3,9 +3,9 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bertons.expensetracker.controller.MainPageViewController">
+<AnchorPane prefHeight="650.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bertons.expensetracker.controller.MainPageViewController">
    <children>
-      <SplitPane dividerPositions="0.045112781954887216, 0.13659147869674185" orientation="VERTICAL" prefHeight="800.0" prefWidth="1200.0">
+      <SplitPane dividerPositions="0.045112781954887216, 0.13659147869674185" orientation="VERTICAL" prefHeight="800.0" prefWidth="1000.0">
         <items>
             <MenuBar prefHeight="16.0" prefWidth="1198.0">
               <menus>
@@ -22,6 +22,12 @@
                     <MenuItem mnemonicParsing="false" onAction="#OnDeleteExpenseButton_Click" text="Delete Expense" />
                   </items>
                 </Menu>
+                  <Menu mnemonicParsing="false" text="View">
+                    <items>
+                      <MenuItem mnemonicParsing="false" onAction="#OnMenuViewPieChartButton_Click" text="Expense Pie Chart" />
+                        <MenuItem mnemonicParsing="false" onAction="#OnMenuViewBarChartButton_Click" text="Expense Bar Chart" />
+                    </items>
+                  </Menu>
                 <Menu mnemonicParsing="false" text="Help">
                   <items>
                     <MenuItem mnemonicParsing="false" onAction="#OnMenuHelpAboutButton_Click" text="About" />
@@ -31,8 +37,8 @@
             </MenuBar>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="163.0" prefWidth="1198.0">
                <children>
-                  <Button layoutX="14.0" mnemonicParsing="false" onAction="#OnInsertExpenseButton_Click" prefHeight="55.0" prefWidth="115.0" text="Insert Expense" />
-                  <Button layoutX="1063.0" mnemonicParsing="false" onAction="#OnDeleteExpenseButton_Click" prefHeight="55.0" prefWidth="121.0" text="Delete Expense" />
+                  <Button layoutX="14.0" layoutY="8.0" mnemonicParsing="false" onAction="#OnInsertExpenseButton_Click" prefHeight="55.0" prefWidth="115.0" text="Insert Expense" />
+                  <Button layoutX="862.0" layoutY="8.0" mnemonicParsing="false" onAction="#OnDeleteExpenseButton_Click" prefHeight="55.0" prefWidth="121.0" text="Delete Expense" />
                </children>
             </AnchorPane>
             <TableView fx:id="tableViewExpenses" editable="true" prefHeight="576.0" prefWidth="1198.0" tableMenuButtonVisible="true">
@@ -41,8 +47,8 @@
                 <TableColumn fx:id="tableColumnAmount" prefWidth="140.0" text="Amount" />
                   <TableColumn fx:id="tableColumnDate" prefWidth="170.0" text="Date" />
                   <TableColumn fx:id="tableColumnExpenseType" prefWidth="202.0" text="Expense Type" />
-                  <TableColumn fx:id="tableColumnPayingMethod" prefWidth="148.0" text="Paying Method" />
-                  <TableColumn fx:id="tableColumnDescription" prefWidth="438.0" text="Description" />
+                  <TableColumn fx:id="tableColumnPayingMethod" minWidth="0.0" prefWidth="135.0" text="Paying Method" />
+                  <TableColumn fx:id="tableColumnDescription" prefWidth="250.39993896484373" text="Description" />
               </columns>
             </TableView>
         </items>

@@ -264,4 +264,10 @@ public class MainPageViewController {
             }
         }
     }
+
+    public void OnMenuViewPieChartButton_Click(ActionEvent actionEvent) {
+    }
+
+    public void OnMenuViewBarChartButton_Click(ActionEvent actionEvent) {
+    }
 }
