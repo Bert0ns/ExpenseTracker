@@ -1,7 +1,6 @@
 package com.bertons.expensetracker.controller;
 
 import com.bertons.expensetracker.persistence.model.Expense;
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -11,7 +10,7 @@ import javafx.scene.control.Alert;
 
 public class ExpensePieChartController {
     @FXML
-    private PieChart expensePieChart;
+    private PieChart expenseAmountPieChart;
 
     ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
 
@@ -50,7 +49,7 @@ public class ExpensePieChartController {
                     break;
             }
         }
-        expensePieChart.getData().setAll(pieChartData);
+        expenseAmountPieChart.getData().setAll(pieChartData);
     }
 
     public void OnMenuFileCloseButton_Click(ActionEvent actionEvent) {
