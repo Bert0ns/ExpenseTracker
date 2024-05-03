@@ -25,6 +25,7 @@ import javafx.util.StringConverter;
 import javafx.util.converter.DoubleStringConverter;
 import javafx.util.converter.LocalDateStringConverter;
 import javafx.util.converter.LongStringConverter;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -127,7 +128,19 @@ public class MainPageViewController {
     }
     private void initializeTableColumnDate() {
         tableColumnDate.setCellValueFactory(data -> new SimpleObjectProperty<>(data.getValue().getDate()));
-        tableColumnDate.setCellFactory(TextFieldTableCell.forTableColumn(new LocalDateStringConverter()));
+        tableColumnDate.setCellFactory(TextFieldTableCell.forTableColumn(new LocalDateStringConverter() {
+            @Override
+            public LocalDate fromString(String string) {
+                try{
+                    return LocalDate.parse(string);
+                }
+                catch (Exception e)
+                {
+                    new Alert(Alert.AlertType.ERROR, "Input Date: " + string + "\nIs NOT a date", ButtonType.OK).showAndWait();
+                    return null;
+                }
+            }
+        }));
         tableColumnDate.setOnEditCommit(e ->{
             Expense selectedExpense = e.getRowValue();
             if(e.getNewValue() != null)
@@ -160,9 +173,12 @@ public class MainPageViewController {
 
             @Override
             public Expense.ExpenseType fromString(String s) {
+                System.out.println(s);
+                s = StringUtils.capitalize(s);
+                System.out.println(s);
                 Expense.ExpenseType expenseType = Expense.getExpenseTypeFromString(s);
                 if (expenseType == null) {
-                    new Alert(Alert.AlertType.ERROR, "Input string: " + s + "\nIs NOT an Expense Type", ButtonType.OK).showAndWait();
+                    new Alert(Alert.AlertType.ERROR, "Input string: " + s + "\nIs NOT an Expense Type.\nTry with: " + Expense.getAllExpenseTypes(), ButtonType.OK).showAndWait();
                     return Expense.ExpenseType.Miscellaneous;
                 }
                 return expenseType;
@@ -185,9 +201,10 @@ public class MainPageViewController {
 
             @Override
             public Expense.PayingMethod fromString(String s) {
+                StringUtils.capitalize(s);
                 Expense.PayingMethod payingMethod = Expense.getPayingMethodFromString(s);
                 if (payingMethod == null) {
-                    new Alert(Alert.AlertType.ERROR, "Input string: " + s + "\nIs NOT a Paying Method", ButtonType.OK).showAndWait();
+                    new Alert(Alert.AlertType.ERROR, "Input string: " + s + "\nIs NOT a Paying Method.\nTry with: " + Expense.getAllPayingMethods(), ButtonType.OK).showAndWait();
                     return Expense.PayingMethod.Cash;
                 }
                 return Expense.getPayingMethodFromString(s);

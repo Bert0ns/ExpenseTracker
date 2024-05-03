@@ -6,6 +6,7 @@ module com.bertons.expensetracker {
     requires org.slf4j;
     requires com.fasterxml.jackson.databind;
     requires com.fasterxml.jackson.datatype.jsr310;
+    requires org.apache.commons.lang3;
 
 
     opens com.bertons.expensetracker to javafx.fxml;

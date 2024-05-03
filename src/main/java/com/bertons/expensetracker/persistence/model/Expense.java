@@ -28,13 +28,18 @@ public class Expense {
             default -> null;
         };
     }
-
     public static PayingMethod getPayingMethodFromString(String payingMethod) {
         return switch (payingMethod) {
             case "Card" -> PayingMethod.Card;
             case "Cash" -> PayingMethod.Cash;
             default -> null;
         };
+    }
+    public static String getAllExpenseTypes() {
+        return "[" + ExpenseType.Miscellaneous + ", " + ExpenseType.Subscription + ", " + ExpenseType.Groceries + ", " + ExpenseType.Debt + ", " + ExpenseType.Car + "]";
+    }
+    public static String getAllPayingMethods() {
+        return "[" + PayingMethod.Cash + ", " + PayingMethod.Card + "]";
     }
 
     private Long id;
