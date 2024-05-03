@@ -32,6 +32,7 @@ public class App extends Application {
 
         primaryStage.setTitle("Hello! Login in the credential manager");
         primaryStage.setScene(scene);
+        primaryStage.setResizable(false);
         primaryStage.show();
     }
 
