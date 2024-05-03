@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.chart.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bertons.expensetracker.controller.ExpensePieChartController">
+<AnchorPane maxHeight="450" maxWidth="500" prefHeight="450.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bertons.expensetracker.controller.ExpensePieChartController">
    <children>
-      <BorderPane prefHeight="400.0" prefWidth="600.0">
+      <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="450.0" prefWidth="500.0">
          <top>
             <MenuBar BorderPane.alignment="CENTER">
               <menus>
