@@ -323,7 +323,7 @@ public class MainPageViewController {
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.setTitle("Expense Pie Chart");
-        stage.setResizable(false);
+        stage.setResizable(true);
         stage.show();
     }
 

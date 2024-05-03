@@ -28,6 +28,7 @@ public class AddExpenseDialog extends Dialog<Expense> {
         comboBoxPayingMethod.getSelectionModel().select(Expense.PayingMethod.Cash);
 
         datePickerExpenseDate.setValue(LocalDate.now());
+        datePickerExpenseDate.setEditable(false);
     }
 
     public AddExpenseDialog() throws IOException {
