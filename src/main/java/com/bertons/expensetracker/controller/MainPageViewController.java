@@ -201,7 +201,7 @@ public class MainPageViewController {
 
             @Override
             public Expense.PayingMethod fromString(String s) {
-                StringUtils.capitalize(s);
+                s = StringUtils.capitalize(s);
                 Expense.PayingMethod payingMethod = Expense.getPayingMethodFromString(s);
                 if (payingMethod == null) {
                     new Alert(Alert.AlertType.ERROR, "Input string: " + s + "\nIs NOT a Paying Method.\nTry with: " + Expense.getAllPayingMethods(), ButtonType.OK).showAndWait();
