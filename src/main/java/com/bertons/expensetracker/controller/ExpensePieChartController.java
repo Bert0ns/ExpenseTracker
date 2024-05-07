@@ -4,11 +4,18 @@ import com.bertons.expensetracker.persistence.model.Expense;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
 
 public class ExpensePieChartController {
+    @FXML
+    private Label percentageLabel2;
+    @FXML
+    private Label percentageLabel1;
     @FXML
     private PieChart payingMethodsPieChart;
     @FXML
@@ -21,10 +28,12 @@ public class ExpensePieChartController {
         initExpenseTypesPieChartData();
         insertDataIntoExpenseTypesPieChartData(expensesData);
         expenseTypesPieChart.getData().setAll(expenseTypesPieChartData);
+        addMouseEventsToExpenseTypesPieChart(expenseTypesPieChart, percentageLabel1);
 
         initPayingMethodsPieChartData();
         insertDataIntoPayingMethodsPieChartData(expensesData);
         payingMethodsPieChart.getData().setAll(payingMethodsPieChartData);
+        addMouseEventsToPayingMethodsPieChart(payingMethodsPieChart, percentageLabel2);
     }
 
     public void updateExpenseTypesPieChartData(ObservableList<Expense> expensesData) {
@@ -55,6 +64,35 @@ public class ExpensePieChartController {
         payingMethodsPieChartData.clear();
         payingMethodsPieChartData.add(new PieChart.Data(Expense.PayingMethod.Cash.toString(), 0));
         payingMethodsPieChartData.add(new PieChart.Data(Expense.PayingMethod.Card.toString(), 0));
+    }
+
+    private void addMouseEventsToPayingMethodsPieChart(final PieChart pieChart, final Label label) {
+        for(final PieChart.Data data : pieChart.getData()) {
+            data.getNode().addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent mouseEvent) {
+                    System.out.println("mouse click");
+                    label.setTranslateX(mouseEvent.getSceneX() - label.getLayoutX() - pieChart.getScene().getWidth() / 2);
+                    label.setTranslateY(mouseEvent.getSceneY() - label.getLayoutY() - pieChart.getLayoutY());
+                    label.setText(data.getPieValue() + "%");
+                }
+            });
+        }
+        label.setViewOrder(pieChart.getViewOrder() - 1);
+    }
+    private void addMouseEventsToExpenseTypesPieChart(final PieChart pieChart, final Label label) {
+        for(final PieChart.Data data : pieChart.getData()) {
+            data.getNode().addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent mouseEvent) {
+                    System.out.println("mouse click");
+                    label.setTranslateX(mouseEvent.getSceneX() - label.getLayoutX());
+                    label.setTranslateY(mouseEvent.getSceneY() - label.getLayoutY());
+                    label.setText(data.getPieValue() + "%");
+                }
+            });
+        }
+        label.setViewOrder(pieChart.getViewOrder() - 1);
     }
 
     private void insertDataIntoExpenseTypesPieChartData(ObservableList<Expense> expensesData) {
