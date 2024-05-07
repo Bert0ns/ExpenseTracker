@@ -12,7 +12,7 @@ The expenses are saved through a database
 
 # To do list
 
-* Graphs
-* UI elements
+* Bar chart
+* ?
 
 
