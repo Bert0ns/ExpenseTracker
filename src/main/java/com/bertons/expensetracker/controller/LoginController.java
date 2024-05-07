@@ -19,6 +19,8 @@ import java.util.Objects;
 
 public class LoginController {
 
+    public static final int MIN_WIDTH = 670;
+    public static final int MIN_HEIGHT = 180;
     @FXML
     private AnchorPane anchorPane;
     @FXML
@@ -71,5 +73,8 @@ public class LoginController {
         Scene scene = new Scene(root);
         stage.setTitle("Your Expense Tracker");
         stage.setScene(scene);
+        stage.setResizable(true);
+        stage.setMinWidth(MIN_WIDTH);
+        stage.setMinHeight(MIN_HEIGHT);
     }
 }
