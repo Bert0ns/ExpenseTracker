@@ -28,10 +28,6 @@
             <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                <children>
                   <PieChart fx:id="expenseTypesPieChart" title="Expense Types" />
-                  <Label fx:id="percentageLabel1" alignment="CENTER" textAlignment="CENTER">
-                     <font>
-                        <Font name="System Bold" size="18.0" />
-                     </font></Label>
                </children>
             </AnchorPane>
          </left>
@@ -39,14 +35,19 @@
             <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                <children>
                   <PieChart fx:id="payingMethodsPieChart" title="Paying Methods" />
-                  <Label fx:id="percentageLabel2" alignment="CENTER" textAlignment="CENTER">
-                     <font>
-                        <Font name="System Bold" size="18.0" />
-                     </font>
-                  </Label>
                </children>
             </AnchorPane>
          </right>
       </BorderPane>
+      <Label fx:id="percentageLabel2" alignment="CENTER" textAlignment="CENTER">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </Label>
+      <Label fx:id="percentageLabel1" alignment="CENTER" textAlignment="CENTER">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>
