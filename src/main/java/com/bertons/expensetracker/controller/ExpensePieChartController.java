@@ -81,7 +81,7 @@ public class ExpensePieChartController {
         for (Expense expense : expensesData) {
             switch (expense.getExpenseType()) {
                 case Miscellaneous:
-                    expenseTypesPieChartData.get(0).setPieValue(expenseTypesPieChartData.get(0).getPieValue() + expense.getAmount());
+                    expenseTypesPieChartData.getFirst().setPieValue(expenseTypesPieChartData.getFirst().getPieValue() + expense.getAmount());
                     break;
                 case Car:
                     expenseTypesPieChartData.get(1).setPieValue(expenseTypesPieChartData.get(1).getPieValue() + expense.getAmount());
