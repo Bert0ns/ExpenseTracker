@@ -49,6 +49,9 @@
                         <TableColumn fx:id="tableColumnPayingMethod" minWidth="0.0" prefWidth="135.0" text="Paying Method" />
                         <TableColumn fx:id="tableColumnDescription" prefWidth="250.39993896484373" text="Description" />
                     </columns>
+                     <BorderPane.margin>
+                        <Insets left="5.0" right="5.0" />
+                     </BorderPane.margin>
                   </TableView>
                </center>
                <top>

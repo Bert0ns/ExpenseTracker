@@ -10,6 +10,8 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 
+import java.text.DecimalFormat;
+
 public class ExpensePieChartController {
     @FXML
     private Label percentageLabel2;
@@ -43,11 +45,13 @@ public class ExpensePieChartController {
         expenseTypesPieChartData.get(4).setPieValue(0);
         expenseTypesPieChartData.get(5).setPieValue(0);
         insertDataIntoExpenseTypesPieChartData(expensesData);
+        percentageLabel1.setText("");
     }
     public void updatePayingMethodPieChartData(ObservableList<Expense> expensesData) {
         payingMethodsPieChartData.get(0).setPieValue(0);
         payingMethodsPieChartData.get(1).setPieValue(0);
         insertDataIntoPayingMethodsPieChartData(expensesData);
+        percentageLabel2.setText("");
     }
 
     private void initExpenseTypesPieChartData() {
@@ -71,7 +75,13 @@ public class ExpensePieChartController {
                 System.out.println("mouse click");
                 label.setTranslateX(mouseEvent.getSceneX() - label.getLayoutX());
                 label.setTranslateY(mouseEvent.getSceneY() - label.getLayoutY());
-                label.setText(data.getPieValue() + "%");
+
+                double totValue = 0;
+                for(final PieChart.Data data1 : pieChart.getData()) {
+                    totValue += data1.getPieValue();
+                }
+                DecimalFormat formatter = new DecimalFormat("#0.00");
+                label.setText(formatter.format(data.getPieValue() / totValue * 100) + "%");
             });
         }
         label.setViewOrder(pieChart.getViewOrder() - 1);
