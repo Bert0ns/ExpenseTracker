@@ -91,7 +91,7 @@ public class MainPageViewController {
         initializeTableColumnPayingMethod();
 
         FilteredList<Expense> filteredList = new FilteredList<>(expenses, expense -> true);
-        SortedList<Expense> sortedList = new SortedList<>(filteredList.sorted(Comparator.comparing(Expense::getDate)));
+        SortedList<Expense> sortedList = new SortedList<>(filteredList.sorted(Comparator.comparing(Expense::getDate).reversed()));
         sortedList.comparatorProperty().bind(tableViewExpenses.comparatorProperty());
         tableViewExpenses.setItems(sortedList);
     }
