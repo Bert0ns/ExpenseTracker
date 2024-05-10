@@ -33,6 +33,7 @@ import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 public class MainPageViewController {
@@ -55,6 +56,7 @@ public class MainPageViewController {
     private ExpenseRepository expenseRepository;
 
     private ExpensePieChartController expensePieChartController;
+    private ExpenseBarChartController expenseBarChartController;
 
     public void initDataSource(HikariDataSource hikariDataSource) {
         this.expenseRepository = new ExpenseRepository(hikariDataSource);
@@ -312,6 +314,11 @@ public class MainPageViewController {
     }
 
     public void OnMenuViewPieChartButton_Click(ActionEvent actionEvent) throws IOException {
+        if(Objects.nonNull(expensePieChartController))
+        {
+            System.out.println("Expense pie charts stage already exists");
+            return;
+        }
         FXMLLoader loader = new FXMLLoader(getClass().getResource("expense-pie-chart-view.fxml"));
         Parent root = loader.load();
         expensePieChartController = loader.getController();
@@ -327,11 +334,25 @@ public class MainPageViewController {
         stage.setResizable(true);
         stage.setHeight(500);
         stage.setMaxHeight(500);
+        stage.setMinHeight(400);
         stage.setMaxWidth(1000);
+        stage.setMinWidth(500);
         stage.show();
     }
 
-    public void OnMenuViewBarChartButton_Click(ActionEvent actionEvent) {
+    public void OnMenuViewBarChartButton_Click(ActionEvent actionEvent) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("expense-bar-chart-view.fxml"));
+        Parent root = loader.load();
+        expenseBarChartController = loader.getController();
 
+        updateExpenses();
+        expenseBarChartController.initBarCharts(expenses);
+
+        Stage stage = new Stage();
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.setTitle("Expense Bar Chart");
+        stage.setResizable(true);
+        stage.show();
     }
 }
