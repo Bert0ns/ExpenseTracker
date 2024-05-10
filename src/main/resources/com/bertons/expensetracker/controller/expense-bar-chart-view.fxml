@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import javafx.scene.chart.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
@@ -33,6 +34,15 @@
               </yAxis>
             </AreaChart>
          </center>
+         <bottom>
+            <ComboBox fx:id="yearsComboBox" onAction="#OnYearsComboBoxSelectYear" prefHeight="26.0" prefWidth="301.0" BorderPane.alignment="CENTER" />
+         </bottom>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+         <padding>
+            <Insets bottom="10.0" />
+         </padding>
       </BorderPane>
    </children>
 </AnchorPane>

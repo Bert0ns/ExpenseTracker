@@ -341,6 +341,11 @@ public class MainPageViewController {
     }
 
     public void OnMenuViewBarChartButton_Click(ActionEvent actionEvent) throws IOException {
+        if(Objects.nonNull(expenseBarChartController))
+        {
+            System.out.println("Expense bar charts stage already exists");
+            return;
+        }
         FXMLLoader loader = new FXMLLoader(getClass().getResource("expense-bar-chart-view.fxml"));
         Parent root = loader.load();
         expenseBarChartController = loader.getController();
