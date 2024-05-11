@@ -27,10 +27,10 @@
          <center>
             <AreaChart fx:id="areaChart" title="Expenses Through The Year" BorderPane.alignment="CENTER">
               <xAxis>
-                <CategoryAxis side="BOTTOM" />
+                <CategoryAxis side="BOTTOM" fx:id="xAxis" />
               </xAxis>
               <yAxis>
-                <NumberAxis side="LEFT" />
+                <NumberAxis fx:id="yAxis" side="LEFT" />
               </yAxis>
             </AreaChart>
          </center>

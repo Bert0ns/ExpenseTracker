@@ -8,14 +8,21 @@ import javafx.fxml.FXML;
 import javafx.scene.chart.AreaChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 
 import java.time.LocalDate;
+import java.time.Month;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class ExpenseBarChartController {
+    @FXML
+    private CategoryAxis xAxis;
+    @FXML
+    private NumberAxis yAxis;
     @FXML
     private ComboBox<Integer> yearsComboBox;
     @FXML
@@ -25,13 +32,18 @@ public class ExpenseBarChartController {
         initializeComboBox(expenses);
         expenses = expenses.stream().filter(expense -> expense.getDate().getYear() == yearsComboBox.getValue()).collect(Collectors.collectingAndThen(Collectors.toList(), FXCollections::observableArrayList));
 
-        final ObservableList<String> months = FXCollections.observableArrayList("Jan", "Feb");
-        CategoryAxis xAxis = new CategoryAxis(months);
+        final ObservableList<String> months = FXCollections.observableArrayList(Month.JANUARY.toString(), Month.FEBRUARY.toString(), Month.MARCH.toString(), Month.APRIL.toString(), Month.MAY.toString(), Month.JUNE.toString(), Month.JULY.toString(), Month.AUGUST.toString(), Month.SEPTEMBER.toString(), Month.OCTOBER.toString(), Month.NOVEMBER.toString(), Month.DECEMBER.toString());
         xAxis.setLabel("Months");
-        NumberAxis yAxis = new NumberAxis();
-        yAxis.setLabel("Monthly amounts");
-        areaChart = new AreaChart<>(xAxis, yAxis);
+        xAxis.setCategories(months);
 
+        yAxis.setLabel("Monthly amounts");
+
+        XYChart.Series<String, Number> series = new XYChart.Series<>();
+        expenses.stream().forEach(expense -> {
+            series.getData().add(new XYChart.Data<>(expense.getDate().getMonth().toString(), expense.getAmount()));
+            series.getData().get(0);
+        });
+        areaChart.getData().add(series);
     }
 
     private void initializeComboBox(ObservableList<Expense> expenses) {
@@ -59,5 +71,6 @@ public class ExpenseBarChartController {
     }
 
     public void OnYearsComboBoxSelectYear(ActionEvent actionEvent) {
+
     }
 }
