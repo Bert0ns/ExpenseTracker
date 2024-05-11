@@ -58,7 +58,6 @@ public class ExpenseBarChartController {
     private void resetSeries(XYChart.Series<String, Number> series) {
         series.getData().forEach(data -> data.setYValue(0));
     }
-
     private void initializeDataSeries(XYChart.Series<String, Number> series) {
         series.getData().add(new XYChart.Data<>(Month.JANUARY.toString(), 0));
         series.getData().add(new XYChart.Data<>(Month.FEBRUARY.toString(), 0));
@@ -73,15 +72,13 @@ public class ExpenseBarChartController {
         series.getData().add(new XYChart.Data<>(Month.NOVEMBER.toString(), 0));
         series.getData().add(new XYChart.Data<>(Month.DECEMBER.toString(), 0));
     }
-
     private void initializeYearsComboBox(ObservableList<Expense> expenses) {
         yearsComboBox.getItems().removeAll();
         ObservableList<Integer> comboBoxChoices = expenses.stream().map(e -> e.getDate().getYear()).distinct().collect(Collectors.collectingAndThen(Collectors.toList(), FXCollections::observableArrayList));;
         yearsComboBox.setItems(comboBoxChoices);
         yearsComboBox.getSelectionModel().selectFirst();
     }
-    private void updateYearsComboBox(ObservableList<Expense> expenses)
-    {
+    private void updateYearsComboBox(ObservableList<Expense> expenses) {
         yearsComboBox.getItems().addAll(expenses.stream().map(e -> e.getDate().getYear()).distinct().toList());
         yearsComboBox.setItems(yearsComboBox.getItems().stream().distinct().collect(Collectors.collectingAndThen(Collectors.toList(), FXCollections::observableArrayList)));
     }
