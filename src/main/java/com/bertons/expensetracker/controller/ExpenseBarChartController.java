@@ -12,10 +12,7 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 
-import java.time.LocalDate;
 import java.time.Month;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -32,7 +29,7 @@ public class ExpenseBarChartController {
     private XYChart.Series<String, Number> series = new XYChart.Series<>();
 
     public void initBarCharts(ObservableList<Expense> expenses) {
-        initializeComboBox(expenses);
+        initializeYearsComboBox(expenses);
 
         final ObservableList<String> months = FXCollections.observableArrayList(Month.JANUARY.toString(), Month.FEBRUARY.toString(), Month.MARCH.toString(), Month.APRIL.toString(), Month.MAY.toString(), Month.JUNE.toString(), Month.JULY.toString(), Month.AUGUST.toString(), Month.SEPTEMBER.toString(), Month.OCTOBER.toString(), Month.NOVEMBER.toString(), Month.DECEMBER.toString());
         xAxis.setCategories(months);
@@ -43,9 +40,7 @@ public class ExpenseBarChartController {
     }
 
     public void updateAreaChart(ObservableList<Expense> expenses) {
-        if(yearsComboBox.getValue() == null) {
-            initializeComboBox(expenses);
-        }
+        updateYearsComboBox(expenses);
 
         resetSeries(series);
         expenses.stream().filter(expense -> expense.getDate().getYear() == yearsComboBox.getValue()).forEach(expense -> {
@@ -79,11 +74,16 @@ public class ExpenseBarChartController {
         series.getData().add(new XYChart.Data<>(Month.DECEMBER.toString(), 0));
     }
 
-    private void initializeComboBox(ObservableList<Expense> expenses) {
+    private void initializeYearsComboBox(ObservableList<Expense> expenses) {
         yearsComboBox.getItems().removeAll();
         ObservableList<Integer> comboBoxChoices = expenses.stream().map(e -> e.getDate().getYear()).distinct().collect(Collectors.collectingAndThen(Collectors.toList(), FXCollections::observableArrayList));;
         yearsComboBox.setItems(comboBoxChoices);
         yearsComboBox.getSelectionModel().selectFirst();
+    }
+    private void updateYearsComboBox(ObservableList<Expense> expenses)
+    {
+        yearsComboBox.getItems().addAll(expenses.stream().map(e -> e.getDate().getYear()).distinct().toList());
+        yearsComboBox.setItems(yearsComboBox.getItems().stream().distinct().collect(Collectors.collectingAndThen(Collectors.toList(), FXCollections::observableArrayList)));
     }
 
     public void OnMenuFileCloseButton_Click(ActionEvent actionEvent) {
@@ -104,6 +104,6 @@ public class ExpenseBarChartController {
     }
 
     public void OnYearsComboBoxSelectYear(ActionEvent actionEvent) {
-
+       // updateAreaChart();
     }
 }
