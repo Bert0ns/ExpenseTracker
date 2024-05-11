@@ -16,6 +16,7 @@ import java.time.LocalDate;
 import java.time.Month;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class ExpenseBarChartController {
@@ -28,22 +29,54 @@ public class ExpenseBarChartController {
     @FXML
     private AreaChart<String, Number> areaChart;
 
+    private XYChart.Series<String, Number> series = new XYChart.Series<>();
+
     public void initBarCharts(ObservableList<Expense> expenses) {
         initializeComboBox(expenses);
-        expenses = expenses.stream().filter(expense -> expense.getDate().getYear() == yearsComboBox.getValue()).collect(Collectors.collectingAndThen(Collectors.toList(), FXCollections::observableArrayList));
 
         final ObservableList<String> months = FXCollections.observableArrayList(Month.JANUARY.toString(), Month.FEBRUARY.toString(), Month.MARCH.toString(), Month.APRIL.toString(), Month.MAY.toString(), Month.JUNE.toString(), Month.JULY.toString(), Month.AUGUST.toString(), Month.SEPTEMBER.toString(), Month.OCTOBER.toString(), Month.NOVEMBER.toString(), Month.DECEMBER.toString());
-        xAxis.setLabel("Months");
         xAxis.setCategories(months);
+        yAxis.setLabel("Monthly Amount");
 
-        yAxis.setLabel("Monthly amounts");
+        initializeDataSeries(series);
+        updateAreaChart(expenses);
+    }
 
-        XYChart.Series<String, Number> series = new XYChart.Series<>();
-        expenses.stream().forEach(expense -> {
-            series.getData().add(new XYChart.Data<>(expense.getDate().getMonth().toString(), expense.getAmount()));
-            series.getData().get(0);
+    public void updateAreaChart(ObservableList<Expense> expenses) {
+        if(yearsComboBox.getValue() == null) {
+            initializeComboBox(expenses);
+        }
+
+        resetSeries(series);
+        expenses.stream().filter(expense -> expense.getDate().getYear() == yearsComboBox.getValue()).forEach(expense -> {
+            series.getData().forEach(data -> {
+                if(Objects.equals(data.getXValue(), expense.getDate().getMonth().toString()))
+                {
+                    data.setYValue(data.getYValue().doubleValue() + expense.getAmount());
+                }
+            });
         });
+        areaChart.getData().clear();
         areaChart.getData().add(series);
+    }
+
+    private void resetSeries(XYChart.Series<String, Number> series) {
+        series.getData().forEach(data -> data.setYValue(0));
+    }
+
+    private void initializeDataSeries(XYChart.Series<String, Number> series) {
+        series.getData().add(new XYChart.Data<>(Month.JANUARY.toString(), 0));
+        series.getData().add(new XYChart.Data<>(Month.FEBRUARY.toString(), 0));
+        series.getData().add(new XYChart.Data<>(Month.MARCH.toString(), 0));
+        series.getData().add(new XYChart.Data<>(Month.APRIL.toString(), 0));
+        series.getData().add(new XYChart.Data<>(Month.MAY.toString(), 0));
+        series.getData().add(new XYChart.Data<>(Month.JUNE.toString(), 0));
+        series.getData().add(new XYChart.Data<>(Month.JULY.toString(), 0));
+        series.getData().add(new XYChart.Data<>(Month.AUGUST.toString(), 0));
+        series.getData().add(new XYChart.Data<>(Month.SEPTEMBER.toString(), 0));
+        series.getData().add(new XYChart.Data<>(Month.OCTOBER.toString(), 0));
+        series.getData().add(new XYChart.Data<>(Month.NOVEMBER.toString(), 0));
+        series.getData().add(new XYChart.Data<>(Month.DECEMBER.toString(), 0));
     }
 
     private void initializeComboBox(ObservableList<Expense> expenses) {

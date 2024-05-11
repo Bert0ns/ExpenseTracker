@@ -58,19 +58,6 @@ public class MainPageViewController {
     private ExpensePieChartController expensePieChartController;
     private ExpenseBarChartController expenseBarChartController;
 
-    public void initDataSource(HikariDataSource hikariDataSource) {
-        this.expenseRepository = new ExpenseRepository(hikariDataSource);
-        updateExpenses();
-    }
-
-    public void OnMenuFileCloseButton_Click(ActionEvent actionEvent) {
-        Platform.exit();
-    }
-
-    public void initialize() {
-        initializeTableViewExpense();
-    }
-
     private void updateExpenses() {
         try {
             Iterable<Expense> expensesFound = this.expenseRepository.findAll();
@@ -121,6 +108,7 @@ public class MainPageViewController {
                 selectedExpense.setAmount(event.getNewValue());
                 expenseRepository.save(selectedExpense);
                 updatePieChart();
+                updateBarChart();
             }
             else
             {
@@ -149,6 +137,7 @@ public class MainPageViewController {
             {
                 selectedExpense.setDate(e.getNewValue());
                 expenseRepository.save(selectedExpense);
+                updateBarChart();
             }
             else
             {
@@ -230,6 +219,27 @@ public class MainPageViewController {
         expensePieChartController.updateExpenseTypesPieChartData(expenses);
         expensePieChartController.updatePayingMethodPieChartData(expenses);
     }
+    private void updateBarChart() {
+        if(Objects.isNull(expenseBarChartController))
+        {
+            return;
+        }
+        updateExpenses();
+        expenseBarChartController.updateAreaChart(expenses);
+    }
+
+    public void initialize() {
+        initializeTableViewExpense();
+    }
+
+    public void initDataSource(HikariDataSource hikariDataSource) {
+        this.expenseRepository = new ExpenseRepository(hikariDataSource);
+        updateExpenses();
+    }
+
+    public void OnMenuFileCloseButton_Click(ActionEvent actionEvent) {
+        Platform.exit();
+    }
 
     public void OnMenuHelpAboutButton_Click(ActionEvent actionEvent) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -267,6 +277,7 @@ public class MainPageViewController {
             }
         }
         updatePieChart();
+        updateBarChart();
     }
 
     public void OnMenuFileExportButton_Click(ActionEvent actionEvent) {
@@ -292,7 +303,7 @@ public class MainPageViewController {
             try {
                 Expense saved = expenseRepository.save(expense);
                 expenses.add(saved);
-
+                updateBarChart();
                 updatePieChart();
             } catch (RuntimeException e) {
                 new Alert(Alert.AlertType.ERROR, e.getMessage(), ButtonType.OK).showAndWait();
@@ -307,6 +318,7 @@ public class MainPageViewController {
                 expenseRepository.deleteById(selectedItem.getId());
                 expenses.remove(selectedItem);
                 updatePieChart();
+                updateBarChart();
             } catch (RuntimeException e) {
                 new Alert(Alert.AlertType.ERROR, e.getMessage(), ButtonType.OK).showAndWait();
             }
