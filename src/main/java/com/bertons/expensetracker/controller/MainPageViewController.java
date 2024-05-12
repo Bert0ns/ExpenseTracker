@@ -360,6 +360,8 @@ public class MainPageViewController {
         stage.setScene(scene);
         stage.setTitle("Expense Bar Chart");
         stage.setResizable(true);
+        stage.setHeight(500);
+        stage.setWidth(1000);
         stage.show();
     }
 }
