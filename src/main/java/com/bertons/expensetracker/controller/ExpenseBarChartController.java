@@ -26,9 +26,11 @@ public class ExpenseBarChartController {
     @FXML
     private AreaChart<String, Number> areaChart;
 
+    private MainPageViewController mainPageViewController;
     private XYChart.Series<String, Number> series = new XYChart.Series<>();
 
-    public void initBarCharts(ObservableList<Expense> expenses) {
+    public void initBarCharts(ObservableList<Expense> expenses, MainPageViewController mainPageViewController) {
+        this.mainPageViewController = mainPageViewController;
         initializeYearsComboBox(expenses);
 
         final ObservableList<String> months = FXCollections.observableArrayList(Month.JANUARY.toString(), Month.FEBRUARY.toString(), Month.MARCH.toString(), Month.APRIL.toString(), Month.MAY.toString(), Month.JUNE.toString(), Month.JULY.toString(), Month.AUGUST.toString(), Month.SEPTEMBER.toString(), Month.OCTOBER.toString(), Month.NOVEMBER.toString(), Month.DECEMBER.toString());
@@ -102,5 +104,6 @@ public class ExpenseBarChartController {
 
     public void OnYearsComboBoxSelectYear(ActionEvent actionEvent) {
        // updateAreaChart();
+        mainPageViewController.updateBarChart();
     }
 }

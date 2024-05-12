@@ -219,7 +219,7 @@ public class MainPageViewController {
         expensePieChartController.updateExpenseTypesPieChartData(expenses);
         expensePieChartController.updatePayingMethodPieChartData(expenses);
     }
-    private void updateBarChart() {
+    public void updateBarChart() {
         if(Objects.isNull(expenseBarChartController))
         {
             return;
@@ -353,7 +353,7 @@ public class MainPageViewController {
         expenseBarChartController = loader.getController();
 
         updateExpenses();
-        expenseBarChartController.initBarCharts(expenses);
+        expenseBarChartController.initBarCharts(expenses, this);
 
         Stage stage = new Stage();
         Scene scene = new Scene(root);
