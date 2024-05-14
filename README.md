@@ -13,6 +13,10 @@ The expenses are saved through a database
 # To do list
 
 * Bar chart
-* ?
+* Support for MultiThreading
+
+# Bugs
+
+* __AreaChart__: insert/delete of an expense on a different year than what is selected, causes a crush   
 
 
