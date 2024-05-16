@@ -18,5 +18,5 @@ The expenses are saved through a database
 # Bugs
 
 * __AreaChart__: insert/delete of an expense on a different year than what is selected, causes a crush   
-
+* __MainView__: date edit doesn't work
 
