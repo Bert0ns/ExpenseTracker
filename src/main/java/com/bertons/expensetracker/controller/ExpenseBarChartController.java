@@ -43,8 +43,18 @@ public class ExpenseBarChartController {
 
     public void updateAreaChart(ObservableList<Expense> expenses) {
         updateYearsComboBox(expenses);
-
         resetSeries(series);
+
+        if(yearsComboBox.getItems().isEmpty())
+        {
+            System.out.println("Empty list combobox");
+            return;
+        }
+
+        if(yearsComboBox.getSelectionModel().getSelectedItem() == null) {
+            yearsComboBox.getSelectionModel().selectFirst();
+        }
+
         expenses.stream().filter(expense -> expense.getDate().getYear() == yearsComboBox.getValue()).forEach(expense -> {
             series.getData().forEach(data -> {
                 if(Objects.equals(data.getXValue(), expense.getDate().getMonth().toString()))
@@ -81,8 +91,25 @@ public class ExpenseBarChartController {
         yearsComboBox.getSelectionModel().selectFirst();
     }
     private void updateYearsComboBox(ObservableList<Expense> expenses) {
-        yearsComboBox.getItems().addAll(expenses.stream().map(e -> e.getDate().getYear()).distinct().toList());
-        yearsComboBox.setItems(yearsComboBox.getItems().stream().distinct().collect(Collectors.collectingAndThen(Collectors.toList(), FXCollections::observableArrayList)));
+        /*
+        yearsComboBox.setItems(expenses.stream().map(e -> e.getDate().getYear()).distinct().collect(Collectors.collectingAndThen(Collectors.toList(), FXCollections::observableArrayList)));
+
+        if(yearsComboBox.getItems().isEmpty())
+        {
+            yearsComboBox.setItems(expenses.stream().map(e -> e.getDate().getYear()).distinct().collect(Collectors.collectingAndThen(Collectors.toList(), FXCollections::observableArrayList)));
+            yearsComboBox.getSelectionModel().selectFirst();
+            return;
+        }
+        try {
+            int years = yearsComboBox.getSelectionModel().getSelectedItem();
+            yearsComboBox.setItems(expenses.stream().map(e -> e.getDate().getYear()).distinct().collect(Collectors.collectingAndThen(Collectors.toList(), FXCollections::observableArrayList)));
+            yearsComboBox.getSelectionModel().select(years);
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+        }
+         */
     }
 
     public void OnMenuFileCloseButton_Click(ActionEvent actionEvent) {
