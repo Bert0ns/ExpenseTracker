@@ -91,25 +91,9 @@ public class ExpenseBarChartController {
         yearsComboBox.getSelectionModel().selectFirst();
     }
     private void updateYearsComboBox(ObservableList<Expense> expenses) {
-        /*
-        yearsComboBox.setItems(expenses.stream().map(e -> e.getDate().getYear()).distinct().collect(Collectors.collectingAndThen(Collectors.toList(), FXCollections::observableArrayList)));
-
-        if(yearsComboBox.getItems().isEmpty())
-        {
-            yearsComboBox.setItems(expenses.stream().map(e -> e.getDate().getYear()).distinct().collect(Collectors.collectingAndThen(Collectors.toList(), FXCollections::observableArrayList)));
-            yearsComboBox.getSelectionModel().selectFirst();
-            return;
-        }
-        try {
-            int years = yearsComboBox.getSelectionModel().getSelectedItem();
-            yearsComboBox.setItems(expenses.stream().map(e -> e.getDate().getYear()).distinct().collect(Collectors.collectingAndThen(Collectors.toList(), FXCollections::observableArrayList)));
-            yearsComboBox.getSelectionModel().select(years);
-        }
-        catch (Exception e)
-        {
-            System.out.println(e.getMessage());
-        }
-         */
+        ObservableList<Integer> items = yearsComboBox.getItems();
+        items.addAll(expenses.stream().map(e -> e.getDate().getYear()).toList());
+        //yearsComboBox.setItems(items.stream().distinct().collect(Collectors.collectingAndThen(Collectors.toList(), FXCollections::observableArrayList)));
     }
 
     public void OnMenuFileCloseButton_Click(ActionEvent actionEvent) {
