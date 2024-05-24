@@ -13,6 +13,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 
 import java.time.Month;
+import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -42,8 +43,8 @@ public class ExpenseBarChartController {
     }
 
     public void updateAreaChart(ObservableList<Expense> expenses) {
-        updateYearsComboBox(expenses);
         resetSeries(series);
+        updateYearsComboBox(expenses);
 
         if(yearsComboBox.getItems().isEmpty())
         {
@@ -91,9 +92,9 @@ public class ExpenseBarChartController {
         yearsComboBox.getSelectionModel().selectFirst();
     }
     private void updateYearsComboBox(ObservableList<Expense> expenses) {
-        ObservableList<Integer> items = yearsComboBox.getItems();
-        items.addAll(expenses.stream().map(e -> e.getDate().getYear()).toList());
-        //yearsComboBox.setItems(items.stream().distinct().collect(Collectors.collectingAndThen(Collectors.toList(), FXCollections::observableArrayList)));
+        List<Integer> yearList = expenses.stream().map(e -> e.getDate().getYear()).distinct().toList();
+        ObservableList<Integer> comboBoxList = FXCollections.observableArrayList(yearList);
+        yearsComboBox.setItems(comboBoxList);
     }
 
     public void OnMenuFileCloseButton_Click(ActionEvent actionEvent) {

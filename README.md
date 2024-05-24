@@ -16,8 +16,9 @@ The expenses are saved through a database
 
 # To do list
 
-* Bar chart
 * Support for MultiThreading
+* Bar chart combo box show too many choices
+* change ui to make it more appealing
 
 # Bugs
 

@@ -214,8 +214,6 @@ public class MainPageViewController {
         {
             return;
         }
-
-        updateExpenses();
         expensePieChartController.updateExpenseTypesPieChartData(expenses);
         expensePieChartController.updatePayingMethodPieChartData(expenses);
     }
@@ -224,7 +222,6 @@ public class MainPageViewController {
         {
             return;
         }
-        updateExpenses();
         expenseBarChartController.updateAreaChart(expenses);
     }
 
@@ -301,8 +298,8 @@ public class MainPageViewController {
     public void OnInsertExpenseButton_Click(ActionEvent actionEvent) throws IOException {
         new AddExpenseDialog().showAndWait().ifPresent(expense -> {
             try {
-                Expense saved = expenseRepository.save(expense);
-                expenses.add(saved);
+                expenseRepository.save(expense);
+                updateExpenses();
                 updateBarChart();
                 updatePieChart();
             } catch (RuntimeException e) {
@@ -316,13 +313,14 @@ public class MainPageViewController {
         if (selectedItem != null) {
             try {
                 expenseRepository.deleteById(selectedItem.getId());
-                expenses.remove(selectedItem);
+                updateExpenses();
                 updatePieChart();
                 updateBarChart();
             } catch (RuntimeException e) {
                 new Alert(Alert.AlertType.ERROR, e.getMessage(), ButtonType.OK).showAndWait();
             }
         }
+        tableViewExpenses.getSelectionModel().selectFirst();
     }
 
     public void OnMenuViewPieChartButton_Click(ActionEvent actionEvent) throws IOException {
