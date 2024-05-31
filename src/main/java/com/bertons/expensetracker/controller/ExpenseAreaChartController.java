@@ -92,9 +92,12 @@ public class ExpenseAreaChartController {
         yearsComboBox.getSelectionModel().selectFirst();
     }
     private void updateYearsComboBox(ObservableList<Expense> expenses) {
+        /*
         List<Integer> yearList = expenses.stream().map(e -> e.getDate().getYear()).distinct().toList();
         ObservableList<Integer> comboBoxList = FXCollections.observableArrayList(yearList);
         yearsComboBox.setItems(comboBoxList);
+
+         */
     }
 
     public void OnMenuFileCloseButton_Click(ActionEvent actionEvent) {
