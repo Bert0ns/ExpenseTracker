@@ -36,7 +36,7 @@ public class Expense {
         };
     }
     public static String getAllExpenseTypes() {
-        return "[" + ExpenseType.Miscellaneous + ", " + ExpenseType.Subscription + ", " + ExpenseType.Groceries + ", " + ExpenseType.Debt + ", " + ExpenseType.Car + "]";
+        return "[" + ExpenseType.Miscellaneous + ", " + ExpenseType.Subscription + ", " + ExpenseType.Groceries + ", " + ExpenseType.Debt + ", " + ExpenseType.Car + ", " + ExpenseType.EatingOut + "]";
     }
     public static String getAllPayingMethods() {
         return "[" + PayingMethod.Cash + ", " + PayingMethod.Card + "]";

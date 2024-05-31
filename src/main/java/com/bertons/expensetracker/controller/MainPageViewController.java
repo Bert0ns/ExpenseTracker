@@ -33,7 +33,6 @@ import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 public class MainPageViewController {
@@ -56,7 +55,7 @@ public class MainPageViewController {
     private ExpenseRepository expenseRepository;
 
     private ExpensePieChartController expensePieChartController;
-    private ExpenseBarChartController expenseBarChartController;
+    private ExpenseAreaChartController expenseAreaChartController;
 
     private void updateExpenses() {
         try {
@@ -108,7 +107,7 @@ public class MainPageViewController {
                 selectedExpense.setAmount(event.getNewValue());
                 expenseRepository.save(selectedExpense);
                 updatePieChart();
-                updateBarChart();
+                updateAreaChart();
             }
             else
             {
@@ -137,7 +136,7 @@ public class MainPageViewController {
             {
                 selectedExpense.setDate(e.getNewValue());
                 expenseRepository.save(selectedExpense);
-                updateBarChart();
+                updateAreaChart();
             }
             else
             {
@@ -217,12 +216,12 @@ public class MainPageViewController {
         expensePieChartController.updateExpenseTypesPieChartData(expenses);
         expensePieChartController.updatePayingMethodPieChartData(expenses);
     }
-    public void updateBarChart() {
-        if(Objects.isNull(expenseBarChartController))
+    public void updateAreaChart() {
+        if(Objects.isNull(expenseAreaChartController))
         {
             return;
         }
-        expenseBarChartController.updateAreaChart(expenses);
+        expenseAreaChartController.updateAreaChart(expenses);
     }
 
     public void initialize() {
@@ -274,7 +273,7 @@ public class MainPageViewController {
             }
         }
         updatePieChart();
-        updateBarChart();
+        updateAreaChart();
     }
 
     public void OnMenuFileExportButton_Click(ActionEvent actionEvent) {
@@ -300,7 +299,7 @@ public class MainPageViewController {
             try {
                 expenseRepository.save(expense);
                 updateExpenses();
-                updateBarChart();
+                updateAreaChart();
                 updatePieChart();
             } catch (RuntimeException e) {
                 new Alert(Alert.AlertType.ERROR, e.getMessage(), ButtonType.OK).showAndWait();
@@ -315,7 +314,7 @@ public class MainPageViewController {
                 expenseRepository.deleteById(selectedItem.getId());
                 updateExpenses();
                 updatePieChart();
-                updateBarChart();
+                updateAreaChart();
             } catch (RuntimeException e) {
                 new Alert(Alert.AlertType.ERROR, e.getMessage(), ButtonType.OK).showAndWait();
             }
@@ -345,18 +344,18 @@ public class MainPageViewController {
         stage.show();
     }
 
-    public void OnMenuViewBarChartButton_Click(ActionEvent actionEvent) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("expense-bar-chart-view.fxml"));
+    public void OnMenuViewAreaChartButton_Click(ActionEvent actionEvent) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("expense-area-chart-view.fxml"));
         Parent root = loader.load();
-        expenseBarChartController = loader.getController();
+        expenseAreaChartController = loader.getController();
 
         updateExpenses();
-        expenseBarChartController.initBarCharts(expenses, this);
+        expenseAreaChartController.initAreaCharts(expenses, this);
 
         Stage stage = new Stage();
         Scene scene = new Scene(root);
         stage.setScene(scene);
-        stage.setTitle("Expense Bar Chart");
+        stage.setTitle("Expense Area Chart");
         stage.setResizable(true);
         stage.setHeight(500);
         stage.setWidth(1000);

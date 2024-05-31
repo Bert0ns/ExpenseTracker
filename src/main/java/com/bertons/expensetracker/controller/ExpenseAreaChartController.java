@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class ExpenseBarChartController {
+public class ExpenseAreaChartController {
     @FXML
     private CategoryAxis xAxis;
     @FXML
@@ -30,7 +30,7 @@ public class ExpenseBarChartController {
     private MainPageViewController mainPageViewController;
     private XYChart.Series<String, Number> series = new XYChart.Series<>();
 
-    public void initBarCharts(ObservableList<Expense> expenses, MainPageViewController mainPageViewController) {
+    public void initAreaCharts(ObservableList<Expense> expenses, MainPageViewController mainPageViewController) {
         this.mainPageViewController = mainPageViewController;
         initializeYearsComboBox(expenses);
 
@@ -116,6 +116,6 @@ public class ExpenseBarChartController {
 
     public void OnYearsComboBoxSelectYear(ActionEvent actionEvent) {
        // updateAreaChart();
-        mainPageViewController.updateBarChart();
+        mainPageViewController.updateAreaChart();
     }
 }
