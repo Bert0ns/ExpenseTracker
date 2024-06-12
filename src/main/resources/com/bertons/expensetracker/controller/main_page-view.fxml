@@ -59,6 +59,8 @@
                     <items>
                         <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#OnInsertExpenseButton_Click" text="Insert Expense" />
                         <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#OnDeleteExpenseButton_Click" text="Delete Expense" />
+                        <Button mnemonicParsing="false" onAction="#OnMenuViewPieChartButton_Click" text="Show Pie Chart" />
+                        <Button mnemonicParsing="false" onAction="#OnMenuViewAreaChartButton_Click" text="Show Area Chart" />
                     </items>
                   </ToolBar>
                </top>
