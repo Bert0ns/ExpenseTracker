@@ -34,11 +34,8 @@ public class LoginController {
         this.hikariDataSource = hikariDataSource;
         this.userRepository = new UserRepository(hikariDataSource);
 
-        // insert some example users
-        // password are saved in "encrypted" form
-        userRepository.deleteAll();
-        userRepository.save(new User("admin", String.valueOf("admin".hashCode())));
-        userRepository.save(new User("user", String.valueOf("user".hashCode())));
+        //userRepository.deleteAll();
+        //userRepository.save(new User("davide", String.valueOf("bertoni".hashCode())));
     }
     @FXML
     void onCancelClicked() {
