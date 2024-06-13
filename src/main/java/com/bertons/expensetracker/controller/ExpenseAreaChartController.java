@@ -13,8 +13,12 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 
 import java.time.Month;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class ExpenseAreaChartController {
     @FXML
@@ -28,6 +32,7 @@ public class ExpenseAreaChartController {
 
     private MainPageViewController mainPageViewController;
     private XYChart.Series<String, Number> series = new XYChart.Series<>();
+    private ObservableList<Integer> comboBoxChoices = FXCollections.observableArrayList();
 
     public void initAreaCharts(ObservableList<Expense> expenses, MainPageViewController mainPageViewController) {
         this.mainPageViewController = mainPageViewController;
@@ -86,17 +91,16 @@ public class ExpenseAreaChartController {
     }
     private void initializeYearsComboBox(ObservableList<Expense> expenses) {
         yearsComboBox.getItems().removeAll();
-        ObservableList<Integer> comboBoxChoices = expenses.stream().map(e -> e.getDate().getYear()).distinct().collect(Collectors.collectingAndThen(Collectors.toList(), FXCollections::observableArrayList));
+        comboBoxChoices.addAll(expenses.stream().map(e -> e.getDate().getYear()).distinct().toList());
         yearsComboBox.setItems(comboBoxChoices);
         yearsComboBox.getSelectionModel().selectFirst();
     }
 
     private void updateYearsComboBox(ObservableList<Expense> expenses) {
-        /*
-        List<Integer> yearList = expenses.stream().map(e -> e.getDate().getYear()).distinct().toList();
-        ObservableList<Integer> comboBoxList = FXCollections.observableArrayList(yearList);
-        yearsComboBox.setItems(comboBoxList);
-         */
+        //Stream.concat(expenses.stream().map(e -> e.getDate().getYear()).distinct().toList().stream(), comboBoxChoices.stream()).distinct().toList();
+
+        comboBoxChoices.clear();
+        comboBoxChoices.addAll(expenses.stream().map(e -> e.getDate().getYear()).distinct().toList());
     }
 
     public void OnMenuFileCloseButton_Click(ActionEvent actionEvent) {
