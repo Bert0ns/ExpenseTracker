@@ -122,7 +122,6 @@ public class MainPageViewController {
             @Override
             public LocalDate fromString(String string) {
                 try{
-
                     return LocalDate.parse(string, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
                 }
                 catch (Exception e)
