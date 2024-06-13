@@ -97,10 +97,22 @@ public class ExpenseAreaChartController {
     }
 
     private void updateYearsComboBox(ObservableList<Expense> expenses) {
-        //Stream.concat(expenses.stream().map(e -> e.getDate().getYear()).distinct().toList().stream(), comboBoxChoices.stream()).distinct().toList();
+        List<Integer> years = expenses.stream().map(e -> e.getDate().getYear()).distinct().toList();
 
-        comboBoxChoices.clear();
-        comboBoxChoices.addAll(expenses.stream().map(e -> e.getDate().getYear()).distinct().toList());
+        for(int y1 : years) {
+            boolean found = false;
+            for(int y2 : comboBoxChoices) {
+                if(y1 == y2)
+                {
+                    found = true;
+                }
+            }
+
+            if(!found)
+            {
+                comboBoxChoices.add(y1);
+            }
+        }
     }
 
     public void OnMenuFileCloseButton_Click(ActionEvent actionEvent) {
@@ -126,6 +138,7 @@ public class ExpenseAreaChartController {
     }
 
     public void OnYearsComboBoxSelectYear(ActionEvent actionEvent) {
-        mainPageViewController.updateAreaChart();
+        ObservableList<Expense> expenses = mainPageViewController.getExpenses();
+        updateAreaChart(expenses);
     }
 }

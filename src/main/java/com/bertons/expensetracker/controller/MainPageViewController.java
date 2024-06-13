@@ -216,7 +216,7 @@ public class MainPageViewController {
         expensePieChartController.updateExpenseTypesPieChartData(expenses);
         expensePieChartController.updatePayingMethodPieChartData(expenses);
     }
-    public void updateAreaChart() {
+    private void updateAreaChart() {
         if(Objects.isNull(expenseAreaChartController))
         {
             return;
@@ -368,7 +368,13 @@ public class MainPageViewController {
         stage.setTitle("Expense Area Chart");
         stage.setResizable(true);
         stage.setHeight(500);
+        stage.setMinHeight(300);
         stage.setWidth(1000);
+        stage.setMinWidth(330);
         stage.show();
+    }
+
+    public ObservableList<Expense> getExpenses() {
+        return expenses;
     }
 }
