@@ -323,6 +323,11 @@ public class MainPageViewController {
     }
 
     public void OnMenuViewPieChartButton_Click(ActionEvent actionEvent) throws IOException {
+        if(Objects.nonNull(expensePieChartController))
+        {
+            expensePieChartController.closeScene();
+        }
+
         FXMLLoader loader = new FXMLLoader(getClass().getResource("expense-pie-chart-view.fxml"));
         Parent root = loader.load();
         expensePieChartController = loader.getController();
