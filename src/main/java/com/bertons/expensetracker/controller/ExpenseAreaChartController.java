@@ -13,12 +13,8 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 
 import java.time.Month;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class ExpenseAreaChartController {
     @FXML
@@ -31,8 +27,8 @@ public class ExpenseAreaChartController {
     private AreaChart<String, Number> areaChart;
 
     private MainPageViewController mainPageViewController;
-    private XYChart.Series<String, Number> series = new XYChart.Series<>();
-    private ObservableList<Integer> comboBoxChoices = FXCollections.observableArrayList();
+    private final XYChart.Series<String, Number> series = new XYChart.Series<>();
+    private final ObservableList<Integer> comboBoxChoices = FXCollections.observableArrayList();
 
     public void initAreaCharts(ObservableList<Expense> expenses, MainPageViewController mainPageViewController) {
         this.mainPageViewController = mainPageViewController;
@@ -102,9 +98,9 @@ public class ExpenseAreaChartController {
         for(int y1 : years) {
             boolean found = false;
             for(int y2 : comboBoxChoices) {
-                if(y1 == y2)
-                {
+                if (y1 == y2) {
                     found = true;
+                    break;
                 }
             }
 
