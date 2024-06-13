@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
 <AnchorPane minHeight="166.0" minWidth="653.0" prefHeight="700.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bertons.expensetracker.controller.MainPageViewController">
@@ -57,10 +58,56 @@
                <top>
                   <ToolBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                     <items>
-                        <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#OnInsertExpenseButton_Click" text="Insert Expense" />
-                        <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#OnDeleteExpenseButton_Click" text="Delete Expense" />
-                        <Button mnemonicParsing="false" onAction="#OnMenuViewPieChartButton_Click" text="Show Pie Chart" />
-                        <Button mnemonicParsing="false" onAction="#OnMenuViewAreaChartButton_Click" text="Show Area Chart" />
+                        <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#OnInsertExpenseButton_Click" prefHeight="47.0" prefWidth="41.0">
+                           <graphic>
+                              <ImageView fitHeight="42.0" fitWidth="87.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../images/icons/icons-add-expense-64.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic></Button>
+                        <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#OnDeleteExpenseButton_Click">
+                           <graphic>
+                              <ImageView fitHeight="45.0" fitWidth="42.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../images/icons/icon-delete-expense-64.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic></Button>
+                        <Button mnemonicParsing="false" onAction="#OnMenuViewPieChartButton_Click" prefWidth="22.0">
+                           <graphic>
+                              <ImageView fitHeight="44.0" fitWidth="42.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../images/icons/IconaPieChart.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic></Button>
+                        <Button mnemonicParsing="false" onAction="#OnMenuViewAreaChartButton_Click" prefWidth="22.0">
+                           <graphic>
+                              <ImageView fitHeight="44.0" fitWidth="42.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../images/icons/IconAreaChart.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic></Button>
+                        <Button mnemonicParsing="false" onAction="#OnMenuFileImportButton_Click" prefHeight="21.0" prefWidth="48.0">
+                           <graphic>
+                              <ImageView fitHeight="45.0" fitWidth="42.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../images/icons/icons8-database-daily-import-80.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button mnemonicParsing="false" onAction="#OnMenuFileExportButton_Click">
+                           <graphic>
+                              <ImageView fitHeight="42.0" fitWidth="47.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../images/icons/icons8-database-daily-export-80.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
                     </items>
                   </ToolBar>
                </top>
