@@ -13,7 +13,6 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 
 import java.time.Month;
-import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -87,7 +86,7 @@ public class ExpenseAreaChartController {
     }
     private void initializeYearsComboBox(ObservableList<Expense> expenses) {
         yearsComboBox.getItems().removeAll();
-        ObservableList<Integer> comboBoxChoices = expenses.stream().map(e -> e.getDate().getYear()).distinct().collect(Collectors.collectingAndThen(Collectors.toList(), FXCollections::observableArrayList));;
+        ObservableList<Integer> comboBoxChoices = expenses.stream().map(e -> e.getDate().getYear()).distinct().collect(Collectors.collectingAndThen(Collectors.toList(), FXCollections::observableArrayList));
         yearsComboBox.setItems(comboBoxChoices);
         yearsComboBox.getSelectionModel().selectFirst();
     }
@@ -101,6 +100,11 @@ public class ExpenseAreaChartController {
     }
 
     public void OnMenuFileCloseButton_Click(ActionEvent actionEvent) {
+        closeScene();
+    }
+
+    public void closeScene()
+    {
         areaChart.getScene().getWindow().hide();
     }
 

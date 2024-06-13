@@ -345,6 +345,11 @@ public class MainPageViewController {
     }
 
     public void OnMenuViewAreaChartButton_Click(ActionEvent actionEvent) throws IOException {
+        if(Objects.nonNull(expenseAreaChartController))
+        {
+            expenseAreaChartController.closeScene();
+        }
+
         FXMLLoader loader = new FXMLLoader(getClass().getResource("expense-area-chart-view.fxml"));
         Parent root = loader.load();
         expenseAreaChartController = loader.getController();
