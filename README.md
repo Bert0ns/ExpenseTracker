@@ -21,5 +21,7 @@ The expenses are saved through a database
 
 # Bugs
 
-* __MainView__: date edit doesn't work
+### Solved
 
+* __MainView__: date edit doesn't work
+* __AreaChart__: year combo box shows too many years

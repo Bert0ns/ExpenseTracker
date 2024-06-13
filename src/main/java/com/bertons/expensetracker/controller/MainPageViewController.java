@@ -30,6 +30,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
@@ -121,7 +122,8 @@ public class MainPageViewController {
             @Override
             public LocalDate fromString(String string) {
                 try{
-                    return LocalDate.parse(string);
+
+                    return LocalDate.parse(string, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
                 }
                 catch (Exception e)
                 {
