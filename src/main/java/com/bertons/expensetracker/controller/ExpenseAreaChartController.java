@@ -56,14 +56,13 @@ public class ExpenseAreaChartController {
             yearsComboBox.getSelectionModel().selectFirst();
         }
 
-        expenses.stream().filter(expense -> expense.getDate().getYear() == yearsComboBox.getValue()).forEach(expense -> {
-            series.getData().forEach(data -> {
-                if(Objects.equals(data.getXValue(), expense.getDate().getMonth().toString()))
-                {
-                    data.setYValue(data.getYValue().doubleValue() + expense.getAmount());
-                }
-            });
-        });
+        expenses.stream().filter(expense -> expense.getDate().getYear() == yearsComboBox.getValue()).forEach(expense -> series.getData().forEach(data -> {
+            if(Objects.equals(data.getXValue(), expense.getDate().getMonth().toString()))
+            {
+                data.setYValue(data.getYValue().doubleValue() + expense.getAmount());
+            }
+        }));
+
         areaChart.getData().clear();
         areaChart.getData().add(series);
     }
