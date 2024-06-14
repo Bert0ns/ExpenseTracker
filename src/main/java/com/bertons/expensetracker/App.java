@@ -7,9 +7,11 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Objects;
 
 public class App extends Application {
     private static final String JDBC_Driver = "org.postgresql.Driver";
@@ -31,6 +33,7 @@ public class App extends Application {
         Scene scene = new Scene(root);
 
         primaryStage.setTitle("Hello! Login in the credential manager");
+        primaryStage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/bertons/expensetracker/images/icons/App-icon.png"))));
         primaryStage.setScene(scene);
         primaryStage.setResizable(false);
         primaryStage.show();

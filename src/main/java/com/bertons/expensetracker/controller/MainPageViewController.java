@@ -19,6 +19,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.image.Image;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
@@ -341,6 +342,7 @@ public class MainPageViewController {
         stage.setScene(scene);
         stage.setTitle("Expense Pie Chart");
 
+        stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/bertons/expensetracker/images/icons/App-icon.png"))));
         stage.setResizable(true);
         stage.setHeight(500);
         stage.setMaxHeight(500);
@@ -367,6 +369,8 @@ public class MainPageViewController {
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.setTitle("Expense Area Chart");
+
+        stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/bertons/expensetracker/images/icons/App-icon.png"))));
         stage.setResizable(true);
         stage.setHeight(500);
         stage.setMinHeight(300);

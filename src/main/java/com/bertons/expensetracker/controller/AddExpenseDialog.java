@@ -4,10 +4,12 @@ import com.bertons.expensetracker.persistence.model.Expense;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.stage.Modality;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class AddExpenseDialog extends Dialog<Expense> {
