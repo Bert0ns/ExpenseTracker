@@ -92,6 +92,7 @@
                         <!-- Default configuration for running with: mvn clean javafx:run -->
                         <id>default-cli</id>
                         <configuration>
+                            <compress>2</compress>
                             <mainClass>com.bertons.expensetracker/com.bertons.expensetracker.App
                             </mainClass>
                             <launcher>app</launcher>
