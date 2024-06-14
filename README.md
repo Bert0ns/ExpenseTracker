@@ -18,7 +18,6 @@ The expenses are saved through a database
 # To do list
 
 * Support for MultiThreading
-* Fix the database
 
 # Bugs
 
@@ -26,3 +25,7 @@ The expenses are saved through a database
 
 * __MainView__: date edit doesn't work
 * __AreaChart__: year combo box shows too many years
+
+# Images and icons found in:
+
+[icons8](https://icons8.it/icons)

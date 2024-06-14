@@ -2,9 +2,10 @@
 
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="137.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bertons.expensetracker.controller.LoginController">
+<AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="163.0" prefWidth="449.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bertons.expensetracker.controller.LoginController">
     <children>
       <GridPane alignment="CENTER" hgap="20.0" prefHeight="103.0" prefWidth="442.0" vgap="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <columnConstraints>
@@ -29,8 +30,28 @@
                       <Tooltip text="Try: &quot;admin&quot;" />
                   </tooltip>
             </PasswordField>
-                <Button alignment="CENTER" mnemonicParsing="false" onAction="#onCancelClicked" prefHeight="31.0" prefWidth="232.0" text="Cancel" GridPane.rowIndex="2" />
-                <Button mnemonicParsing="false" onAction="#onOKClicked" prefHeight="31.0" prefWidth="221.0" text="OK" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                <Button alignment="CENTER" mnemonicParsing="false" onAction="#onCancelClicked" prefHeight="36.0" prefWidth="210.0" text="Cancel" GridPane.rowIndex="2" />
+                <Button mnemonicParsing="false" onAction="#onOKClicked" prefHeight="36.0" prefWidth="209.0" text="OK" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <ImageView fitHeight="41.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/icons/icons8-nome-utente-96.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="39.0" fitWidth="39.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="1">
+               <image>
+                  <Image url="@../images/icons/icons8-sign-in-form-password-96.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="37.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="2">
+               <image>
+                  <Image url="@../images/icons/icons8-accedi-arrotondato-destro-96.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="38.0" fitWidth="42.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="2">
+               <image>
+                  <Image url="@../images/icons/icons8-rimuovi-512.png" />
+               </image>
+            </ImageView>
          </children>
          <padding>
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
