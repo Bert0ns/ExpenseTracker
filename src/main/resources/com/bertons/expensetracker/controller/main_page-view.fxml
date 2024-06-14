@@ -62,7 +62,7 @@
                            <graphic>
                               <ImageView fitHeight="42.0" fitWidth="377.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@../images/icons/icons-add-expense-64.png" />
+                                    <Image url="@../images/icons/MainView/icons-add-expense-64.png" />
                                  </image>
                               </ImageView>
                            </graphic></Button>
@@ -70,7 +70,7 @@
                            <graphic>
                               <ImageView fitHeight="45.0" fitWidth="42.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@../images/icons/icon-delete-expense-64.png" />
+                                    <Image url="@../images/icons/MainView/icon-delete-expense-64.png" />
                                  </image>
                               </ImageView>
                            </graphic></Button>
@@ -78,7 +78,7 @@
                            <graphic>
                               <ImageView fitHeight="44.0" fitWidth="42.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@../images/icons/IconaPieChart.png" />
+                                    <Image url="@../images/icons/MainView/IconaPieChart.png" />
                                  </image>
                               </ImageView>
                            </graphic></Button>
@@ -86,7 +86,7 @@
                            <graphic>
                               <ImageView fitHeight="44.0" fitWidth="42.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@../images/icons/IconAreaChart.png" />
+                                    <Image url="@../images/icons/MainView/IconAreaChart.png" />
                                  </image>
                               </ImageView>
                            </graphic></Button>
@@ -94,7 +94,7 @@
                            <graphic>
                               <ImageView fitHeight="45.0" fitWidth="42.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@../images/icons/icons8-database-daily-import-80.png" />
+                                    <Image url="@../images/icons/MainView/icons8-database-daily-import-80.png" />
                                  </image>
                               </ImageView>
                            </graphic>
@@ -103,7 +103,7 @@
                            <graphic>
                               <ImageView fitHeight="42.0" fitWidth="47.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@../images/icons/icons8-database-daily-export-80.png" />
+                                    <Image url="@../images/icons/MainView/icons8-database-daily-export-80.png" />
                                  </image>
                               </ImageView>
                            </graphic>
