@@ -12,11 +12,12 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 
+import java.io.Closeable;
 import java.time.Month;
 import java.util.List;
 import java.util.Objects;
 
-public class ExpenseAreaChartController {
+public class ExpenseAreaChartController implements DataToCharts, Closeable {
     @FXML
     private CategoryAxis xAxis;
     @FXML
@@ -30,7 +31,8 @@ public class ExpenseAreaChartController {
     private final XYChart.Series<String, Number> series = new XYChart.Series<>();
     private final ObservableList<Integer> comboBoxChoices = FXCollections.observableArrayList();
 
-    public void initAreaCharts(ObservableList<Expense> expenses, MainPageViewController mainPageViewController) {
+    @Override
+    public void initCharts(ObservableList<Expense> expenses, MainPageViewController mainPageViewController) {
         this.mainPageViewController = mainPageViewController;
         initializeYearsComboBox(expenses);
 
@@ -39,10 +41,11 @@ public class ExpenseAreaChartController {
         yAxis.setLabel("Monthly Amount");
 
         initializeDataSeries(series);
-        updateAreaChart(expenses);
+        updateCharts(expenses);
     }
 
-    public void updateAreaChart(ObservableList<Expense> expenses) {
+    @Override
+    public void updateCharts(ObservableList<Expense> expenses) {
         resetSeries(series);
         updateYearsComboBox(expenses);
 
@@ -111,10 +114,11 @@ public class ExpenseAreaChartController {
     }
 
     public void OnMenuFileCloseButton_Click(ActionEvent actionEvent) {
-        closeScene();
+        close();
     }
 
-    public void closeScene()
+    @Override
+    public void close()
     {
         areaChart.getScene().getWindow().hide();
     }
@@ -134,6 +138,6 @@ public class ExpenseAreaChartController {
 
     public void OnYearsComboBoxSelectYear(ActionEvent actionEvent) {
         ObservableList<Expense> expenses = mainPageViewController.getExpenses();
-        updateAreaChart(expenses);
+        updateCharts(expenses);
     }
 }

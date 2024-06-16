@@ -28,6 +28,7 @@ import javafx.util.converter.LocalDateStringConverter;
 import javafx.util.converter.LongStringConverter;
 import org.apache.commons.lang3.StringUtils;
 
+import java.io.Closeable;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
@@ -37,7 +38,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.StreamSupport;
 
-public class MainPageViewController {
+public class MainPageViewController implements Closeable {
     @FXML
     private TableView<Expense> tableViewExpenses;
     @FXML
@@ -215,15 +216,14 @@ public class MainPageViewController {
         {
             return;
         }
-        expensePieChartController.updateExpenseTypesPieChartData(expenses);
-        expensePieChartController.updatePayingMethodPieChartData(expenses);
+        expensePieChartController.updateCharts(expenses);
     }
     private void updateAreaChart() {
         if(Objects.isNull(expenseAreaChartController))
         {
             return;
         }
-        expenseAreaChartController.updateAreaChart(expenses);
+        expenseAreaChartController.updateCharts(expenses);
     }
 
     public void initialize() {
@@ -327,7 +327,7 @@ public class MainPageViewController {
     public void OnMenuViewPieChartButton_Click(ActionEvent actionEvent) throws IOException {
         if(Objects.nonNull(expensePieChartController))
         {
-            expensePieChartController.closeScene();
+            expensePieChartController.close();
         }
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("expense-pie-chart-view.fxml"));
@@ -335,7 +335,7 @@ public class MainPageViewController {
         expensePieChartController = loader.getController();
 
         updateExpenses();
-        expensePieChartController.initPieCharts(expenses);
+        expensePieChartController.initCharts(expenses, this);
 
         Stage stage = new Stage();
         Scene scene = new Scene(root);
@@ -355,7 +355,7 @@ public class MainPageViewController {
     public void OnMenuViewAreaChartButton_Click(ActionEvent actionEvent) throws IOException {
         if(Objects.nonNull(expenseAreaChartController))
         {
-            expenseAreaChartController.closeScene();
+            expenseAreaChartController.close();
         }
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("expense-area-chart-view.fxml"));
@@ -363,7 +363,7 @@ public class MainPageViewController {
         expenseAreaChartController = loader.getController();
 
         updateExpenses();
-        expenseAreaChartController.initAreaCharts(expenses, this);
+        expenseAreaChartController.initCharts(expenses, this);
 
         Stage stage = new Stage();
         Scene scene = new Scene(root);
@@ -381,5 +381,17 @@ public class MainPageViewController {
 
     public ObservableList<Expense> getExpenses() {
         return expenses;
+    }
+
+    @Override
+    public void close() throws IOException {
+        if(Objects.nonNull(expensePieChartController))
+        {
+            expensePieChartController.close();
+        }
+        if(Objects.nonNull(expenseAreaChartController))
+        {
+            expenseAreaChartController.close();
+        }
     }
 }

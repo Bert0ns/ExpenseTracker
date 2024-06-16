@@ -10,9 +10,10 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 
+import java.io.Closeable;
 import java.text.DecimalFormat;
 
-public class ExpensePieChartController {
+public class ExpensePieChartController implements DataToCharts, Closeable {
     @FXML
     private Label percentageLabel2;
     @FXML
@@ -25,7 +26,8 @@ public class ExpensePieChartController {
     ObservableList<PieChart.Data> expenseTypesPieChartData = FXCollections.observableArrayList();
     ObservableList<PieChart.Data> payingMethodsPieChartData = FXCollections.observableArrayList();
 
-    public void initPieCharts(ObservableList<Expense> expensesData) {
+    @Override
+    public void initCharts(ObservableList<Expense> expensesData, MainPageViewController mainPageViewController) {
         initExpenseTypesPieChartData();
         insertDataIntoExpenseTypesPieChartData(expensesData);
         expenseTypesPieChart.getData().setAll(expenseTypesPieChartData);
@@ -37,7 +39,13 @@ public class ExpensePieChartController {
         addMouseEventsToPieChart(payingMethodsPieChart, percentageLabel2);
     }
 
-    public void updateExpenseTypesPieChartData(ObservableList<Expense> expensesData) {
+    @Override
+    public void updateCharts(ObservableList<Expense> expensesData) {
+        updateExpenseTypesPieChartData(expensesData);
+        updatePayingMethodPieChartData(expensesData);
+    }
+
+    private void updateExpenseTypesPieChartData(ObservableList<Expense> expensesData) {
         expenseTypesPieChartData.get(0).setPieValue(0);
         expenseTypesPieChartData.get(1).setPieValue(0);
         expenseTypesPieChartData.get(2).setPieValue(0);
@@ -47,7 +55,7 @@ public class ExpensePieChartController {
         insertDataIntoExpenseTypesPieChartData(expensesData);
         percentageLabel1.setText("");
     }
-    public void updatePayingMethodPieChartData(ObservableList<Expense> expensesData) {
+    private void updatePayingMethodPieChartData(ObservableList<Expense> expensesData) {
         payingMethodsPieChartData.get(0).setPieValue(0);
         payingMethodsPieChartData.get(1).setPieValue(0);
         insertDataIntoPayingMethodsPieChartData(expensesData);
@@ -121,10 +129,11 @@ public class ExpensePieChartController {
     }
 
     public void OnMenuFileCloseButton_Click(ActionEvent actionEvent) {
-        closeScene();
+        close();
     }
 
-    public void closeScene()
+    @Override
+    public void close()
     {
         payingMethodsPieChart.getScene().getWindow().hide();
     }

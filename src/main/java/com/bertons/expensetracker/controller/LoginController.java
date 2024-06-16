@@ -73,5 +73,12 @@ public class LoginController {
         stage.setResizable(true);
         stage.setMinWidth(MIN_WIDTH);
         stage.setMinHeight(MIN_HEIGHT);
+        stage.setOnCloseRequest(e -> {
+            try {
+                controller.close();
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
     }
 }
