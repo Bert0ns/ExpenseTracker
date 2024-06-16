@@ -18,7 +18,6 @@ The expenses are saved through a database
 # To do list
 
 * Support for MultiThreading
-* Create interface to simplify code in areaChartController and PieChartController
 
 # Bugs
 
