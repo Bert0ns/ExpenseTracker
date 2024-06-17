@@ -166,9 +166,7 @@ public class MainPageViewController implements Closeable {
 
             @Override
             public Expense.ExpenseType fromString(String s) {
-                System.out.println(s);
                 s = StringUtils.capitalize(s);
-                System.out.println(s);
                 Expense.ExpenseType expenseType = Expense.getExpenseTypeFromString(s);
                 if (expenseType == null) {
                     new Alert(Alert.AlertType.ERROR, "Input string: " + s + "\nIs NOT an Expense Type.\nTry with: " + Expense.getAllExpenseTypes(), ButtonType.OK).showAndWait();
