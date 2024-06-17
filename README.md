@@ -17,7 +17,7 @@ The expenses are saved through a database
 
 # To do list
 
-* Add a refresh view button
+
 
 # Bugs
 
