@@ -381,6 +381,10 @@ public class MainPageViewController implements Closeable {
         return expenses;
     }
 
+    public void OnButtonRefreshData_Click(ActionEvent actionEvent) {
+        updateExpenses();
+    }
+
     @Override
     public void close() throws IOException {
         if(Objects.nonNull(expensePieChartController))

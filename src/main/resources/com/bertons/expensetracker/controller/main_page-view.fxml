@@ -28,6 +28,7 @@
                     <items>
                       <MenuItem mnemonicParsing="false" onAction="#OnMenuViewPieChartButton_Click" text="Expense Pie Chart" />
                         <MenuItem mnemonicParsing="false" onAction="#OnMenuViewAreaChartButton_Click" text="Expense Area Chart" />
+                        <MenuItem mnemonicParsing="false" onAction="#OnButtonRefreshData_Click" text="Refresh Data" />
                     </items>
                   </Menu>
                 <Menu mnemonicParsing="false" text="Help">
@@ -104,6 +105,15 @@
                               <ImageView fitHeight="42.0" fitWidth="47.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
                                     <Image url="@../images/icons/MainView/icons8-database-daily-export-80.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button layoutX="345.0" layoutY="10.0" mnemonicParsing="false" onAction="#OnButtonRefreshData_Click">
+                           <graphic>
+                              <ImageView fitHeight="42.0" fitWidth="47.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../images/icons/MainView/icons8-refresh-80.png" />
                                  </image>
                               </ImageView>
                            </graphic>
