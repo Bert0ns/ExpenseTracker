@@ -17,7 +17,7 @@ The expenses are saved through a database
 
 # To do list
 
-* Support for MultiThreading
+* 
 
 # Bugs
 
