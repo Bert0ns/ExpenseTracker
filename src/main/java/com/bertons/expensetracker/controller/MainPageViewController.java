@@ -383,6 +383,8 @@ public class MainPageViewController implements Closeable {
 
     public void OnButtonRefreshData_Click(ActionEvent actionEvent) {
         updateExpenses();
+        updatePieChart();
+        updateAreaChart();
     }
 
     @Override
