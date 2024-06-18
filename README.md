@@ -13,7 +13,7 @@ javafx
 
 ## Backend 
 
-The expenses are saved through a database 
+Postgres database 
 
 # To do list
 
