@@ -15,7 +15,6 @@ import java.util.Objects;
 
 public class App extends Application {
     private static final String JDBC_Driver = "org.postgresql.Driver";
-    //private static final String JDBC_URL = "jdbc:postgresql://192.168.1.149:5432/jdbc_schema?user=user&password=secret&ssl=false";
     private static final String JDBC_URL = "jdbc:postgresql://localhost:5432/jdbc_schema?user=user&password=secret&ssl=false";
 
     public static void main(String[] args) {
