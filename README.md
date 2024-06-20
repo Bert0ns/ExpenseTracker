@@ -33,6 +33,6 @@ Remember to replace `{YOUR_IP_ADDRESS}` with your ip address
 * Import/export data using .json files
 * Multi user support
 
-## Images and icons found in:
+### Images and icons found in:
 
 [icons8](https://icons8.it/icons)
