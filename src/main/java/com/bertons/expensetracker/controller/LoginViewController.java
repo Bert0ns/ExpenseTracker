@@ -17,7 +17,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.Objects;
 
-public class LoginController {
+public class LoginViewController implements ViewController {
 
     public static final int MIN_WIDTH = 670;
     public static final int MIN_HEIGHT = 180;
@@ -30,6 +30,7 @@ public class LoginController {
     private HikariDataSource hikariDataSource;
     private UserRepository userRepository;
 
+    @Override
     public void initDataSource(HikariDataSource hikariDataSource) {
         this.hikariDataSource = hikariDataSource;
         this.userRepository = new UserRepository(hikariDataSource);
@@ -37,9 +38,10 @@ public class LoginController {
         //userRepository.deleteAll();
         //userRepository.save(new User("davide", String.valueOf("bertoni".hashCode())));
     }
+
     @FXML
     void onCancelClicked() {
-        Platform.exit();
+        close();
     }
 
     @FXML
@@ -63,8 +65,8 @@ public class LoginController {
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("main_page-view.fxml"));
         Parent root = loader.load();
-        MainPageViewController controller = loader.getController();
-        controller.initDataSource(hikariDataSource);
+        ViewController mainViewController = loader.getController();
+        mainViewController.initDataSource(hikariDataSource);
 
         Stage stage = (Stage) anchorPane.getScene().getWindow();
         Scene scene = new Scene(root);
@@ -75,10 +77,15 @@ public class LoginController {
         stage.setMinHeight(MIN_HEIGHT);
         stage.setOnCloseRequest(e -> {
             try {
-                controller.close();
+                mainViewController.close();
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
         });
+    }
+
+    @Override
+    public void close() {
+        Platform.exit();
     }
 }

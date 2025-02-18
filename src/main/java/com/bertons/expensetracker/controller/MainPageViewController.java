@@ -38,7 +38,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.StreamSupport;
 
-public class MainPageViewController implements Closeable {
+public class MainPageViewController implements ViewController {
     @FXML
     private TableView<Expense> tableViewExpenses;
     @FXML
@@ -228,9 +228,22 @@ public class MainPageViewController implements Closeable {
         initializeTableViewExpense();
     }
 
+    @Override
     public void initDataSource(HikariDataSource hikariDataSource) {
         this.expenseRepository = new ExpenseRepository(hikariDataSource);
         updateExpenses();
+    }
+
+    @Override
+    public void close() {
+        if(Objects.nonNull(expensePieChartController))
+        {
+            expensePieChartController.close();
+        }
+        if(Objects.nonNull(expenseAreaChartController))
+        {
+            expenseAreaChartController.close();
+        }
     }
 
     public void OnMenuFileCloseButton_Click(ActionEvent actionEvent) {
@@ -387,15 +400,5 @@ public class MainPageViewController implements Closeable {
         updateAreaChart();
     }
 
-    @Override
-    public void close() throws IOException {
-        if(Objects.nonNull(expensePieChartController))
-        {
-            expensePieChartController.close();
-        }
-        if(Objects.nonNull(expenseAreaChartController))
-        {
-            expenseAreaChartController.close();
-        }
-    }
+
 }

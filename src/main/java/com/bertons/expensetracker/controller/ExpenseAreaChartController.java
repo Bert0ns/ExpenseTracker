@@ -12,12 +12,11 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 
-import java.io.Closeable;
 import java.time.Month;
 import java.util.List;
 import java.util.Objects;
 
-public class ExpenseAreaChartController implements DataToCharts, Closeable {
+public class ExpenseAreaChartController extends ChartController {
     @FXML
     private CategoryAxis xAxis;
     @FXML
@@ -124,16 +123,13 @@ public class ExpenseAreaChartController implements DataToCharts, Closeable {
     }
 
     public void OnMenuHelpAboutButton_Click(ActionEvent actionEvent) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("About");
-        alert.setHeaderText("Expense Tracker");
-        alert.setContentText("""
+        String contentText = """
                 Author:
                 Davide Bertoni
                 
                 This is the area chart visualizing the expenses through the year
-                """);
-        alert.showAndWait();
+                """;
+        super.showAboutInformation(actionEvent, contentText);
     }
 
     public void OnYearsComboBoxSelectYear(ActionEvent actionEvent) {

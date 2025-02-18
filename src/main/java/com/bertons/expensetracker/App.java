@@ -1,6 +1,6 @@
 package com.bertons.expensetracker;
 
-import com.bertons.expensetracker.controller.LoginController;
+import com.bertons.expensetracker.controller.ViewController;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import javafx.application.Application;
@@ -27,8 +27,8 @@ public class App extends Application {
 
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("controller/login-view.fxml"));
         Parent root = fxmlLoader.load();
-        LoginController controller = fxmlLoader.getController();
-        controller.initDataSource(hikariDataSource);
+        ViewController loginDataSource = fxmlLoader.getController();
+        loginDataSource.initDataSource(hikariDataSource);
 
         Scene scene = new Scene(root);
 

@@ -6,14 +6,12 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.chart.PieChart;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 
-import java.io.Closeable;
 import java.text.DecimalFormat;
 
-public class ExpensePieChartController implements DataToCharts, Closeable {
+public class ExpensePieChartController extends ChartController {
     @FXML
     private Label percentageLabel2;
     @FXML
@@ -132,24 +130,19 @@ public class ExpensePieChartController implements DataToCharts, Closeable {
         close();
     }
 
+    public void OnMenuHelpAboutButton_Click(ActionEvent actionEvent) {
+        String contentText = """
+                Author:
+                Davide Bertoni
+                
+                These pie charts help to visualize the expenses through the year
+                """;
+        super.showAboutInformation(actionEvent, contentText);
+    }
+
     @Override
     public void close()
     {
         payingMethodsPieChart.getScene().getWindow().hide();
-    }
-
-    public void OnMenuHelpAboutButton_Click(ActionEvent actionEvent) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("About");
-        alert.setHeaderText("Expense Tracker");
-        alert.setContentText("""
-                Author:
-                Davide Bertoni
-                
-                This is the pie chart visualizing the expenses
-                
-                version 0.1
-                """);
-        alert.showAndWait();
     }
 }
