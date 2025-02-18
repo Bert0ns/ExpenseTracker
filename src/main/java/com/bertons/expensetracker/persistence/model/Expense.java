@@ -64,10 +64,6 @@ public class Expense {
         this(null, amount, date, description, expenseType, payingMethod);
     }
 
-    public Expense() {
-
-    }
-
     public Long getId() {
         return id;
     }
