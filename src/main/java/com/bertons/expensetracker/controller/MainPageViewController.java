@@ -22,13 +22,13 @@ import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.Image;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.util.Pair;
 import javafx.util.StringConverter;
 import javafx.util.converter.DoubleStringConverter;
 import javafx.util.converter.LocalDateStringConverter;
 import javafx.util.converter.LongStringConverter;
 import org.apache.commons.lang3.StringUtils;
 
-import java.io.Closeable;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
@@ -57,8 +57,8 @@ public class MainPageViewController implements ViewController {
     private final ObservableList<Expense> expenses = FXCollections.observableArrayList();
     private ExpenseRepository expenseRepository;
 
-    private ExpensePieChartController expensePieChartController;
-    private ExpenseAreaChartController expenseAreaChartController;
+    private ChartController expensePieChartController;
+    private ChartController expenseAreaChartController;
 
     private void updateExpenses() {
         try {
@@ -341,16 +341,9 @@ public class MainPageViewController implements ViewController {
             expensePieChartController.close();
         }
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("expense-pie-chart-view.fxml"));
-        Parent root = loader.load();
-        expensePieChartController = loader.getController();
-
-        updateExpenses();
-        expensePieChartController.initCharts(expenses, this);
-
-        Stage stage = new Stage();
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
+        Pair<ChartController, Stage> values = openChart("expense-pie-chart-view.fxml");
+        expensePieChartController = values.getKey();
+        Stage stage = values.getValue();
         stage.setTitle("Expense Pie Chart");
 
         stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/bertons/expensetracker/images/icons/App-icon.png"))));
@@ -369,18 +362,10 @@ public class MainPageViewController implements ViewController {
             expenseAreaChartController.close();
         }
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("expense-area-chart-view.fxml"));
-        Parent root = loader.load();
-        expenseAreaChartController = loader.getController();
-
-        updateExpenses();
-        expenseAreaChartController.initCharts(expenses, this);
-
-        Stage stage = new Stage();
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
+        Pair<ChartController, Stage> values = openChart("expense-area-chart-view.fxml");
+        expenseAreaChartController = values.getKey();
+        Stage stage = values.getValue();
         stage.setTitle("Expense Area Chart");
-
         stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/bertons/expensetracker/images/icons/App-icon.png"))));
         stage.setResizable(true);
         stage.setHeight(500);
@@ -388,6 +373,20 @@ public class MainPageViewController implements ViewController {
         stage.setWidth(1000);
         stage.setMinWidth(330);
         stage.show();
+    }
+
+    private Pair<ChartController, Stage> openChart(String viewPath) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(viewPath));
+        Parent root = loader.load();
+        ChartController chartController = loader.getController();
+
+        updateExpenses();
+        chartController.initCharts(expenses, this);
+
+        Stage stage = new Stage();
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        return new Pair<>(chartController, stage);
     }
 
     public ObservableList<Expense> getExpenses() {

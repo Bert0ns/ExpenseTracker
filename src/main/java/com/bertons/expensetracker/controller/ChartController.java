@@ -14,4 +14,7 @@ public abstract class ChartController implements DataToCharts, Closeable {
         alert.setContentText(contentText);
         alert.showAndWait();
     }
+
+    @Override
+    public void close() {}
 }
