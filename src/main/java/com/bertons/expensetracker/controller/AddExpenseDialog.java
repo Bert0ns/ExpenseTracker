@@ -11,13 +11,13 @@ import java.time.LocalDate;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class AddExpenseDialog extends Dialog<Expense> {
-
     @FXML private TextField textFieldAmount;
     @FXML private TextField textFieldDescription;
     @FXML private DatePicker datePickerExpenseDate;
     @FXML private ComboBox<Expense.ExpenseType> comboBoxExpenseType;
     @FXML private ComboBox<Expense.PayingMethod> comboBoxPayingMethod;
 
+    @FXML
     public void initialize() {
         comboBoxExpenseType.getItems().removeAll();
         comboBoxExpenseType.getItems().addAll(Expense.ExpenseType.values());

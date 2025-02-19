@@ -129,7 +129,7 @@ public class ExpenseAreaChartController extends ChartController {
                 
                 This is the area chart visualizing the expenses through the year
                 """;
-        super.showAboutInformation(actionEvent, contentText);
+        super.showAboutInformation(contentText);
     }
 
     public void OnYearsComboBoxSelectYear(ActionEvent actionEvent) {

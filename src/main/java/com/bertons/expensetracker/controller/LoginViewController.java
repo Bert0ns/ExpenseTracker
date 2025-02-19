@@ -41,12 +41,12 @@ public class LoginViewController implements ViewController {
     }
 
     @FXML
-    void onCancelClicked() {
+    private void onCancelClicked() {
         close();
     }
 
     @FXML
-    void onOKClicked() throws IOException {
+    private void onOKClicked() throws IOException {
         Iterable<User> users = userRepository.findAll();
         for (User user : users) {
             if (Objects.equals(user.getUsername(), tfUsername.getText()) &&
@@ -62,7 +62,7 @@ public class LoginViewController implements ViewController {
         a.showAndWait();
     }
 
-    void launchApplication() throws IOException {
+    private void launchApplication() throws IOException {
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("main_page-view.fxml"));
         Parent root = loader.load();

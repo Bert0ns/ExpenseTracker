@@ -1,84 +1,6 @@
-# Expense Tracker
-
-This is an app that can be used to track your expenses using a database.
-It will show the analytics through useful charts.
-
-To start the database:
-```shell
-docker compose -f docker-compose.yaml up
-```
-
-If it is the first time you start up the database you have to at least create 1 user, in `LoginController.initDataSource()` you will find these lines, uncomment them:
-
-```
-//userRepository.deleteAll();
-//userRepository.save(new User("user", String.valueOf("user".hashCode())));
-```
-
-More than one client can be connected to the same database, even if it is not hosted locally.
-It has to be at least hosted in a device connected to the same Wi-Fi network, and then you can connect to it by replacing `App.JDBC_URL` with this string:
-
-```java
-private static final String JDBC_URL = "jdbc:postgresql://{YOUR_IP_ADDRESS}:543/jdbc_schema?user=user&password=secret&ssl=false";
-```
-
-Remember to replace `{YOUR_IP_ADDRESS}` with your ip address
-
-## Features
-
-* Protection to user input
-* Auto refresh the charts every time you change the expenses
-* Pie chart that shows in which type of expenses you sped the most
-* Area chart that shows the expenses through the year
-* Import/export data using .json files
-* Multi user support
-
-### Images and icons found in:
-
-[icons8](https://icons8.it/icons)
-
-## Class Diagram
-```mermaid
-classDiagram
-
-    Application <|-- App
-    App --> ViewController
-
-    DataSource <|-- ViewController
-    Closeable <|-- ViewController
-
-    ViewController <|.. LoginViewController
-    LoginViewController --> Repository
-
-    ViewController <|.. MainPageViewController
-    MainPageViewController --> Repository
-    MainPageViewController --> ChartController
-    MainPageViewController --> AddExpenseDialog
-
-    Closeable <|-- ChartController
-    DataToCharts <|-- ChartController
-
-    ChartController <|.. ExpenseAreaChartController
-    ExpenseAreaChartController --> MainPageViewController
-
-    ChartController <|.. ExpensePieChartController
-    ExpensePieChartController --> MainPageViewController
-
-    Repository <|.. ExpenseRepository
-    ExpenseRepository --> Expense
-
-    Repository <|.. UserRepository
-    UserRepository --> User
-
-    Expense --> ExpenseType
-    Expense --> PayingMethod
-
-    Dialog <|-- AddExpenseDialog
-    AddExpenseDialog --> Expense
-
-
-class Application {
-    +start(primaryStage : Stage) : void
+@startuml
+abstract class Application {
+    + start(primaryStage : Stage) : void
 }
 class App {
     - JDBC_Driver : String
@@ -89,18 +11,18 @@ class App {
 }
 
 
-class DataSource {
+interface DataSource {
     + initDataSource(hikariDataSource : HikariDataSource) : void
 }
-class Closeable {
+interface Closeable {
     + close() : void
 }
-class ViewController{
+interface ViewController{
    + close() : void
    + initDataSource(hikariDataSource : HikariDataSource) : void
 }
 
-class Repository{
+interface Repository<T, ID>{
      + findById(id : ID) : Optional<T>
      + findAll() : Iterable<T>
      + save(entity : T) : T
@@ -126,12 +48,12 @@ class MainPageViewController {
     + close() : void
 }
 
-class DataToCharts {
+interface DataToCharts {
     + initCharts(expensesData : ObservableList<Expense>, mainPageViewController : MainPageViewController) : void
     + updateCharts(expensesData : ObservableList<Expense>) : void
 }
 
-class ChartController {
+abstract class ChartController {
     + initCharts(expensesData : ObservableList<Expense>, mainPageViewController : MainPageViewController) : void
     + updateCharts(expensesData : ObservableList<Expense>) : void
     + showAboutInformation(contentText : String )
@@ -170,7 +92,7 @@ class Expense {
     + getAllExpenseTypes() : String
     + getAllPayingMethods() : String
 }
-class ExpenseType {
+enum ExpenseType {
     Miscellaneous
     Subscription
     EatingOut
@@ -178,7 +100,7 @@ class ExpenseType {
     Debt
     Car
 }
-class PayingMethod {
+enum PayingMethod {
     Card
     Cash
 }
@@ -202,4 +124,42 @@ class AddExpenseDialog {
     + initialize() : void
     + AddExpenseDialog()
 }
-```
+
+
+
+Application <|-- App : implements
+App --> ViewController
+
+DataSource <|-- ViewController
+Closeable <|-- ViewController
+
+ViewController <|.. LoginViewController
+LoginViewController --> Repository
+
+ViewController <|.. MainPageViewController
+MainPageViewController --> Repository
+MainPageViewController --> ChartController
+MainPageViewController --> AddExpenseDialog
+
+Closeable <|-- ChartController
+DataToCharts <|-- ChartController
+
+ChartController <|.. ExpenseAreaChartController
+ExpenseAreaChartController --> MainPageViewController
+
+ChartController <|.. ExpensePieChartController
+ExpensePieChartController --> MainPageViewController
+
+Repository <|.. ExpenseRepository
+ExpenseRepository --> Expense
+
+Repository <|.. UserRepository
+UserRepository --> User
+
+Expense --> ExpenseType
+Expense --> PayingMethod
+
+Dialog <|-- AddExpenseDialog
+AddExpenseDialog --> Expense
+
+@enduml

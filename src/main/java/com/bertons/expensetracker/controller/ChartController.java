@@ -7,7 +7,7 @@ import java.io.Closeable;
 
 public abstract class ChartController implements DataToCharts, Closeable {
 
-    public void showAboutInformation(ActionEvent actionEvent, String contentText) {
+    public void showAboutInformation(String contentText) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("About");
         alert.setHeaderText("Expense Tracker");

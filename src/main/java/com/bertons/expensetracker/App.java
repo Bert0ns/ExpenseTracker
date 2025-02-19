@@ -24,7 +24,7 @@ public class App extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
-        HikariDataSource hikariDataSource = initDataSource();
+        HikariDataSource hikariDataSource = createDataSource();
 
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("controller/login-view.fxml"));
         Parent root = fxmlLoader.load();
@@ -40,7 +40,7 @@ public class App extends Application {
         primaryStage.show();
     }
 
-    private HikariDataSource initDataSource() {
+    private HikariDataSource createDataSource() {
         HikariConfig config = new HikariConfig();
         config.setDriverClassName(App.JDBC_Driver);
         config.setJdbcUrl(App.JDBC_URL);

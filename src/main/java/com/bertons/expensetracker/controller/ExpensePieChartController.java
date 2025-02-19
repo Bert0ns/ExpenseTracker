@@ -137,7 +137,7 @@ public class ExpensePieChartController extends ChartController {
                 
                 These pie charts help to visualize the expenses through the year
                 """;
-        super.showAboutInformation(actionEvent, contentText);
+        super.showAboutInformation(contentText);
     }
 
     @Override
