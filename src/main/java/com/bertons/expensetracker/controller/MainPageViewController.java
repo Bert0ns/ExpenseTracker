@@ -1,6 +1,7 @@
 package com.bertons.expensetracker.controller;
 
 import com.bertons.expensetracker.persistence.dao.ExpenseRepository;
+import com.bertons.expensetracker.persistence.dao.Repository;
 import com.bertons.expensetracker.persistence.model.Expense;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -55,7 +56,7 @@ public class MainPageViewController implements ViewController {
     private TableColumn<Expense, Expense.PayingMethod> tableColumnPayingMethod;
 
     private final ObservableList<Expense> expenses = FXCollections.observableArrayList();
-    private ExpenseRepository expenseRepository;
+    private Repository<Expense, Long> expenseRepository;
 
     private ChartController expensePieChartController;
     private ChartController expenseAreaChartController;
@@ -72,7 +73,7 @@ public class MainPageViewController implements ViewController {
 
     private void initializeTableViewExpense() {
         System.out.println("Initializing table view expense");
-        tableViewExpenses.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        tableViewExpenses.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN);
 
         initializeTableColumnId();
         initializeTableColumnAmount();
@@ -224,6 +225,7 @@ public class MainPageViewController implements ViewController {
         expenseAreaChartController.updateCharts(expenses);
     }
 
+    @FXML
     public void initialize() {
         initializeTableViewExpense();
     }

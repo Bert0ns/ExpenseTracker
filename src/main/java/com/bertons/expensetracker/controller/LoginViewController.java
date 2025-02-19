@@ -1,5 +1,6 @@
 package com.bertons.expensetracker.controller;
 
+import com.bertons.expensetracker.persistence.dao.Repository;
 import com.bertons.expensetracker.persistence.dao.UserRepository;
 import com.bertons.expensetracker.persistence.model.User;
 import com.zaxxer.hikari.HikariDataSource;
@@ -28,7 +29,7 @@ public class LoginViewController implements ViewController {
     @FXML
     private TextField tfUsername;
     private HikariDataSource hikariDataSource;
-    private UserRepository userRepository;
+    private Repository<User, Long> userRepository;
 
     @Override
     public void initDataSource(HikariDataSource hikariDataSource) {
