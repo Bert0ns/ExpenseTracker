@@ -25,6 +25,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 import javafx.util.StringConverter;
+import javafx.util.converter.DefaultStringConverter;
 import javafx.util.converter.DoubleStringConverter;
 import javafx.util.converter.LocalDateStringConverter;
 import javafx.util.converter.LongStringConverter;
@@ -37,6 +38,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.stream.StreamSupport;
 
 public class MainPageViewController implements ViewController {
@@ -61,6 +64,135 @@ public class MainPageViewController implements ViewController {
     private ChartController expensePieChartController;
     private ChartController expenseAreaChartController;
 
+    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    private static final String INVALID_AMOUNT_MESSAGE = "Input amount: %s\nIs NOT a number, try changing \",\" with \".\"";
+    private static final String INVALID_DATE_MESSAGE = "Input Date: %s\nIs NOT a date";
+    private static final String INVALID_EXPENSE_TYPE_MESSAGE = "Input string: %s\nIs NOT an Expense Type.\nTry with: %s";
+    private static final String INVALID_PAYING_METHOD_MESSAGE = "Input string: %s\nIs NOT a Paying Method.\nTry with: %s";
+
+    private void initializeTableViewExpense() {
+        System.out.println("Initializing table view expense");
+        tableViewExpenses.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN);
+
+        setupColumn(tableColumnExpenseId, Expense::getId, new LongStringConverter(), null);
+        setupColumn(tableColumnAmount, Expense::getAmount, createDoubleConverter(), this::handleAmountEdit);
+        setupColumn(tableColumnDate, Expense::getDate, createDateConverter(), this::handleDateEdit);
+        setupColumn(tableColumnDescription, Expense::getDescription, new DefaultStringConverter(), this::handleDescriptionEdit);
+        setupColumn(tableColumnExpenseType, Expense::getExpenseType, createExpenseTypeConverter(), this::handleExpenseTypeEdit);
+        setupColumn(tableColumnPayingMethod, Expense::getPayingMethod, createPayingMethodConverter(), this::handlePayingMethodEdit);
+
+        setupTableSorting();
+    }
+    private <T> void setupColumn(TableColumn<Expense, T> column, Function<Expense, T> propertyGetter, StringConverter<T> converter, Consumer<TableColumn.CellEditEvent<Expense, T>> editHandler) {
+        column.setCellValueFactory(data -> new SimpleObjectProperty<>(propertyGetter.apply(data.getValue())));
+        column.setCellFactory(TextFieldTableCell.forTableColumn(converter));
+        if (editHandler != null) {
+            column.setOnEditCommit(editHandler::accept);
+        }
+    }
+    private void setupTableSorting() {
+        FilteredList<Expense> filteredList = new FilteredList<>(expenses, expense -> true);
+        SortedList<Expense> sortedList = new SortedList<>(filteredList.sorted(Comparator.comparing(Expense::getDate).reversed()));
+        sortedList.comparatorProperty().bind(tableViewExpenses.comparatorProperty());
+        tableViewExpenses.setItems(sortedList);
+    }
+    private StringConverter<LocalDate> createDateConverter() {
+        return new LocalDateStringConverter(DATE_FORMATTER, DATE_FORMATTER) {
+            @Override
+            public LocalDate fromString(String string) {
+                try {
+                    return LocalDate.parse(string, DATE_FORMATTER);
+                } catch (Exception e) {
+                    showAlert(String.format(INVALID_DATE_MESSAGE, string));
+                    return null;
+                }
+            }
+        };
+    }
+    private StringConverter<Double> createDoubleConverter() {
+        return new DoubleStringConverter() {
+            @Override
+            public Double fromString(String string) {
+                try{
+                    return Double.parseDouble(string);
+                } catch (Exception e) {
+                    showAlert(String.format(INVALID_AMOUNT_MESSAGE, string));
+                    return null;
+                }
+            }
+        };
+    }
+    private StringConverter<Expense.ExpenseType> createExpenseTypeConverter() {
+        return new StringConverter<>() {
+            @Override
+            public String toString(Expense.ExpenseType type) {
+                return type.toString();
+            }
+
+            @Override
+            public Expense.ExpenseType fromString(String str) {
+                str = StringUtils.capitalize(str);
+                Expense.ExpenseType type = Expense.getExpenseTypeFromString(str);
+                if (type == null) {
+                    showAlert(String.format(INVALID_EXPENSE_TYPE_MESSAGE, str, Expense.getAllExpenseTypes()));
+                    return Expense.ExpenseType.Miscellaneous;
+                }
+                return type;
+            }
+        };
+    }
+    private StringConverter<Expense.PayingMethod> createPayingMethodConverter() {
+        return new StringConverter<>() {
+            @Override
+            public String toString(Expense.PayingMethod method) {
+                return method.toString();
+            }
+
+            @Override
+            public Expense.PayingMethod fromString(String str) {
+                str = StringUtils.capitalize(str);
+                Expense.PayingMethod method = Expense.getPayingMethodFromString(str);
+                if (method == null) {
+                    showAlert(String.format(INVALID_PAYING_METHOD_MESSAGE, str, Expense.getAllPayingMethods()));
+                    return Expense.PayingMethod.Cash;
+                }
+                return method;
+            }
+        };
+    }
+    private void handleAmountEdit(TableColumn.CellEditEvent<Expense, Double> event) {
+        if (event.getNewValue() != null) {
+            updateExpense(event.getRowValue(), expense -> expense.setAmount(event.getNewValue()));
+        } else {
+            updateExpenses();
+        }
+    }
+    private void handleDateEdit(TableColumn.CellEditEvent<Expense, LocalDate> event) {
+        if (event.getNewValue() != null) {
+            updateExpense(event.getRowValue(), expense -> expense.setDate(event.getNewValue()));
+        } else {
+            updateExpenses();
+        }
+    }
+    private void handleDescriptionEdit(TableColumn.CellEditEvent<Expense, String> event) {
+        updateExpense(event.getRowValue(), expense -> expense.setDescription(event.getNewValue()));
+    }
+    private void handleExpenseTypeEdit(TableColumn.CellEditEvent<Expense, Expense.ExpenseType> event) {
+        updateExpense(event.getRowValue(), expense -> expense.setExpenseType(event.getNewValue()));
+    }
+    private void handlePayingMethodEdit(TableColumn.CellEditEvent<Expense, Expense.PayingMethod> event) {
+        updateExpense(event.getRowValue(), expense -> expense.setPayingMethod(event.getNewValue()));
+    }
+    private void updateExpense(Expense expense, Consumer<Expense> updateAction) {
+        updateAction.accept(expense);
+        expenseRepository.save(expense);
+        updatePieChart();
+        updateAreaChart();
+    }
+    private void showAlert(String message) {
+        new Alert(Alert.AlertType.ERROR, message, ButtonType.OK).showAndWait();
+    }
+
     private void updateExpenses() {
         try {
             Iterable<Expense> expensesFound = this.expenseRepository.findAll();
@@ -69,145 +201,6 @@ public class MainPageViewController implements ViewController {
         } catch (Exception e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage(), ButtonType.OK).showAndWait();
         }
-    }
-
-    private void initializeTableViewExpense() {
-        System.out.println("Initializing table view expense");
-        tableViewExpenses.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN);
-
-        initializeTableColumnId();
-        initializeTableColumnAmount();
-        initializeTableColumnDate();
-        initializeTableColumnDescription();
-        initializeTableColumnExpenseType();
-        initializeTableColumnPayingMethod();
-
-        FilteredList<Expense> filteredList = new FilteredList<>(expenses, expense -> true);
-        SortedList<Expense> sortedList = new SortedList<>(filteredList.sorted(Comparator.comparing(Expense::getDate).reversed()));
-        sortedList.comparatorProperty().bind(tableViewExpenses.comparatorProperty());
-        tableViewExpenses.setItems(sortedList);
-    }
-    private void initializeTableColumnId() {
-        tableColumnExpenseId.setCellValueFactory(data -> new SimpleObjectProperty<>(data.getValue().getId()));
-        tableColumnExpenseId.setCellFactory(TextFieldTableCell.forTableColumn(new LongStringConverter()));
-    }
-    private void initializeTableColumnAmount() {
-        tableColumnAmount.setCellValueFactory(data -> new SimpleObjectProperty<>(data.getValue().getAmount()));
-        tableColumnAmount.setCellFactory(TextFieldTableCell.forTableColumn(new DoubleStringConverter() {
-            @Override
-            public Double fromString(String string) {
-                try{
-                    return Double.parseDouble(string);
-                } catch (Exception e) {
-                    new Alert(Alert.AlertType.ERROR, "Input amount: " + string + "\nIs NOT a number, try changing \",\" with \".\"", ButtonType.OK).showAndWait();
-                    return null;
-                }
-            }
-        }));
-        tableColumnAmount.setOnEditCommit(event -> {
-            Expense selectedExpense = event.getRowValue();
-            if(event.getNewValue() != null)
-            {
-                selectedExpense.setAmount(event.getNewValue());
-                expenseRepository.save(selectedExpense);
-                updatePieChart();
-                updateAreaChart();
-            }
-            else
-            {
-                updateExpenses();
-            }
-        });
-    }
-    private void initializeTableColumnDate() {
-        tableColumnDate.setCellValueFactory(data -> new SimpleObjectProperty<>(data.getValue().getDate()));
-        tableColumnDate.setCellFactory(TextFieldTableCell.forTableColumn(new LocalDateStringConverter() {
-            @Override
-            public LocalDate fromString(String string) {
-                try{
-                    return LocalDate.parse(string, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-                }
-                catch (Exception e)
-                {
-                    new Alert(Alert.AlertType.ERROR, "Input Date: " + string + "\nIs NOT a date", ButtonType.OK).showAndWait();
-                    return null;
-                }
-            }
-        }));
-        tableColumnDate.setOnEditCommit(e ->{
-            Expense selectedExpense = e.getRowValue();
-            if(e.getNewValue() != null)
-            {
-                selectedExpense.setDate(e.getNewValue());
-                expenseRepository.save(selectedExpense);
-                updateAreaChart();
-            }
-            else
-            {
-                updateExpenses();
-            }
-        });
-    }
-    private void initializeTableColumnDescription() {
-        tableColumnDescription.setCellValueFactory(data -> new SimpleObjectProperty<>(data.getValue().getDescription()));
-        tableColumnDescription.setCellFactory(TextFieldTableCell.forTableColumn());
-        tableColumnDescription.setOnEditCommit(e ->{
-            Expense selectedExpense = e.getRowValue();
-            selectedExpense.setDescription(e.getNewValue());
-            expenseRepository.save(selectedExpense);
-        });
-    }
-    private void initializeTableColumnExpenseType(){
-        tableColumnExpenseType.setCellValueFactory(data -> new SimpleObjectProperty<>(data.getValue().getExpenseType()));
-        tableColumnExpenseType.setCellFactory(TextFieldTableCell.forTableColumn(new StringConverter<>() {
-            @Override
-            public String toString(Expense.ExpenseType expenseType) {
-                return expenseType.toString();
-            }
-
-            @Override
-            public Expense.ExpenseType fromString(String s) {
-                s = StringUtils.capitalize(s);
-                Expense.ExpenseType expenseType = Expense.getExpenseTypeFromString(s);
-                if (expenseType == null) {
-                    new Alert(Alert.AlertType.ERROR, "Input string: " + s + "\nIs NOT an Expense Type.\nTry with: " + Expense.getAllExpenseTypes(), ButtonType.OK).showAndWait();
-                    return Expense.ExpenseType.Miscellaneous;
-                }
-                return expenseType;
-            }
-        }));
-        tableColumnExpenseType.setOnEditCommit(e -> {
-            Expense selectedExpense = e.getRowValue();
-            selectedExpense.setExpenseType(e.getNewValue());
-            expenseRepository.save(selectedExpense);
-            updatePieChart();
-        });
-    }
-    private void initializeTableColumnPayingMethod(){
-        tableColumnPayingMethod.setCellValueFactory(data -> new SimpleObjectProperty<>(data.getValue().getPayingMethod()));
-        tableColumnPayingMethod.setCellFactory(TextFieldTableCell.forTableColumn(new StringConverter<>() {
-            @Override
-            public String toString(Expense.PayingMethod expensePayingMethod) {
-                return expensePayingMethod.toString();
-            }
-
-            @Override
-            public Expense.PayingMethod fromString(String s) {
-                s = StringUtils.capitalize(s);
-                Expense.PayingMethod payingMethod = Expense.getPayingMethodFromString(s);
-                if (payingMethod == null) {
-                    new Alert(Alert.AlertType.ERROR, "Input string: " + s + "\nIs NOT a Paying Method.\nTry with: " + Expense.getAllPayingMethods(), ButtonType.OK).showAndWait();
-                    return Expense.PayingMethod.Cash;
-                }
-                return Expense.getPayingMethodFromString(s);
-            }
-        }));
-        tableColumnPayingMethod.setOnEditCommit(e ->{
-            Expense selectedExpense = e.getRowValue();
-            selectedExpense.setPayingMethod(e.getNewValue());
-            expenseRepository.save(selectedExpense);
-            updatePieChart();
-        });
     }
 
     private void updatePieChart() {
@@ -400,6 +393,4 @@ public class MainPageViewController implements ViewController {
         updatePieChart();
         updateAreaChart();
     }
-
-
 }
