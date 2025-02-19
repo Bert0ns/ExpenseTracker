@@ -127,8 +127,8 @@ class AddExpenseDialog {
 
 
 
-Application <|-- App : implements
-App --> ViewController
+Application <|-- App
+App -> ViewController
 
 DataSource <|-- ViewController
 Closeable <|-- ViewController
@@ -144,7 +144,7 @@ MainPageViewController --> AddExpenseDialog
 Closeable <|-- ChartController
 DataToCharts <|-- ChartController
 
-ChartController <|.. ExpenseAreaChartController
+ChartController <|... ExpenseAreaChartController
 ExpenseAreaChartController --> MainPageViewController
 
 ChartController <|.. ExpensePieChartController
@@ -159,7 +159,7 @@ UserRepository --> User
 Expense --> ExpenseType
 Expense --> PayingMethod
 
-Dialog <|-- AddExpenseDialog
-AddExpenseDialog --> Expense
+Dialog <|- AddExpenseDialog
+AddExpenseDialog -> Expense
 
 @enduml
