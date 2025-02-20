@@ -1,0 +1,21 @@
+@startuml
+
+left to right direction
+
+actor Utente
+actor Sistema
+
+rectangle Applicazione {
+  Utente -- (Login)
+  Utente -- (Visualizza storico spese)
+  Utente -- (Inserisci nuova spesa)
+  Utente -- (Cancella spesa)
+  Utente -- (Importa/Esporta dati)
+  Utente -- (Genera grafici a torta)
+  Utente -- (Genera grafico ad area)
+  (Genera grafici a torta) -- Sistema
+  (Genera grafico ad area) -- Sistema
+  (Salva dati in database) -- Sistema
+}
+
+@enduml
