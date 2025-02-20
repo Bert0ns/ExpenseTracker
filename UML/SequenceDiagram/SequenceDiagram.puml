@@ -1,39 +1,48 @@
 @startuml
 actor Utente
-participant UI
-participant GestoreSpese
-participant Database
+participant MainPageView_UI
+participant MainPageViewController
 
-Utente -> UI: Clicca su "Aggiungi spesa"
-activate UI
-UI -> UI: Mostra form nuova spesa
-UI -> Utente: Richiede dati spesa
-deactivate UI
+Utente -> MainPageView_UI: Clicca su "Aggiungi spesa"
+activate MainPageView_UI
+MainPageView_UI -> MainPageViewController ++ : addExpenseButtonClick()
+create AddExpenseDialog
+MainPageViewController -> AddExpenseDialog -- : new
 
-Utente -> UI: Inserisce dati spesa
-activate UI
-UI -> GestoreSpese: Invia dati spesa
-deactivate UI
-activate GestoreSpese
-GestoreSpese -> GestoreSpese: Valida dati spesa
+MainPageView_UI -> Utente: Richiede dati spesa
+Utente -> MainPageView_UI: Inserisce dati spesa
+
+MainPageView_UI -> AddExpenseDialog ++: Submit Dialog
+deactivate MainPageView_UI
+
+AddExpenseDialog -> AddExpenseDialog: validateExpenseData()
 
 alt Dati validi
-    GestoreSpese -> Database: Salva spesa
-    activate Database
-    Database --> GestoreSpese: Conferma salvataggio
-    deactivate Database
-    GestoreSpese -> UI: Conferma aggiunta spesa
-    deactivate GestoreSpese
-    activate UI
-    UI -> UI: Aggiorna tabella spese
-    UI -> Utente: Mostra messaggio di successo
-    deactivate UI
+    AddExpenseDialog -> MainPageViewController : saveExpense()
+    destroy AddExpenseDialog
+
+    activate MainPageViewController
+    MainPageViewController -> ExpenseRepository: save(entity:Expense)
+    activate ExpenseRepository
+    ExpenseRepository --> MainPageViewController: Conferma salvataggio
+    deactivate ExpenseRepository
+    MainPageViewController -> MainPageView_UI : Conferma aggiunta spesa
+    deactivate MainPageViewController
+    activate MainPageView_UI
+
+    MainPageView_UI -> MainPageView_UI : Aggiorna tabella spese
+    deactivate MainPageView_UI
 else Dati non validi
-    GestoreSpese -> UI: Notifica errore validazione
-    deactivate GestoreSpese
-    activate UI
-    UI -> Utente: Mostra messaggio di errore
-    deactivate UI
+    AddExpenseDialog -> MainPageViewController : Return error
+    destroy AddExpenseDialog
+
+    activate MainPageViewController
+    MainPageViewController -> MainPageView_UI -- : Notifica errore validazione
+    activate AddExpenseDialog
+
+    activate MainPageView_UI
+    MainPageView_UI -> Utente: Mostra messaggio di errore
+    deactivate MainPageView_UI
 end
 
 @enduml
