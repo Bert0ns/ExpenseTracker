@@ -1,0 +1,22 @@
+@startuml
+
+[*] -> NonAutenticato
+
+NonAutenticato -> Autenticato : Login
+Autenticato ---> VisualizzazioneSpese : Visualizza storico
+
+VisualizzazioneSpese --> InserimentoSpesa : Inserisci nuova spesa
+InserimentoSpesa --> VisualizzazioneSpese : Salva o annulla spesa
+
+VisualizzazioneSpese --> ModificaSpesa : Modifica spesa
+ModificaSpesa --> VisualizzazioneSpese : Salva o annulla modifiche
+
+VisualizzazioneSpese --> GenerazioneGrafici : Genera grafici
+GenerazioneGrafici --> VisualizzazioneSpese : Grafici chiusi
+
+ImportaEsportaDati <-- VisualizzazioneSpese : Importa/Esporta dati
+ImportaEsportaDati --> VisualizzazioneSpese : fine operazione
+
+VisualizzazioneSpese -> [*] : Chiusura app
+
+@enduml

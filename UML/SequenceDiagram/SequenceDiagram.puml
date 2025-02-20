@@ -1,0 +1,39 @@
+@startuml
+actor Utente
+participant UI
+participant GestoreSpese
+participant Database
+
+Utente -> UI: Clicca su "Aggiungi spesa"
+activate UI
+UI -> UI: Mostra form nuova spesa
+UI -> Utente: Richiede dati spesa
+deactivate UI
+
+Utente -> UI: Inserisce dati spesa
+activate UI
+UI -> GestoreSpese: Invia dati spesa
+deactivate UI
+activate GestoreSpese
+GestoreSpese -> GestoreSpese: Valida dati spesa
+
+alt Dati validi
+    GestoreSpese -> Database: Salva spesa
+    activate Database
+    Database --> GestoreSpese: Conferma salvataggio
+    deactivate Database
+    GestoreSpese -> UI: Conferma aggiunta spesa
+    deactivate GestoreSpese
+    activate UI
+    UI -> UI: Aggiorna tabella spese
+    UI -> Utente: Mostra messaggio di successo
+    deactivate UI
+else Dati non validi
+    GestoreSpese -> UI: Notifica errore validazione
+    deactivate GestoreSpese
+    activate UI
+    UI -> Utente: Mostra messaggio di errore
+    deactivate UI
+end
+
+@enduml

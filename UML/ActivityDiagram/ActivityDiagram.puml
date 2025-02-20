@@ -1,0 +1,26 @@
+@startuml
+start
+
+:Utente avvia l'applicazione;
+
+:Utente effettua il login;
+
+:Utente visualizza la pagina principale;
+
+:Utente clicca sul pulsante "Aggiungi spesa";
+
+repeat
+:Sistema visualizza il modulo di inserimento spesa;
+
+:Utente compila i campi del modulo (importo, data, tipo, metodo, descrizione);
+
+:Utente clicca sul pulsante "Conferma";
+backward :Sistema visualizza
+messaggio di errore;
+repeat while (Dati validi?) is (NO) not (SI)
+
+:Sistema salva la spesa nel database;
+:Sistema aggiorna la tabella delle spese;
+
+stop
+@enduml
