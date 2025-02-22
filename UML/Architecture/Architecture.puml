@@ -8,16 +8,14 @@ package "Expense Tracker" {
   database "Postgresql" as db
 }
 
-model -> db : update data
-db --> model : read data
-model -> controller
+model -> db : stores data
+db --> model : reads data
 
-view --> User : shows data
+view -> User : sees
 view <-- model : updates
-view <-- controller : updates
 
-controller <-- User : inputs data
-controller -> model
+controller -> model : manipulates
 
+User --> controller : uses
 
 @enduml
