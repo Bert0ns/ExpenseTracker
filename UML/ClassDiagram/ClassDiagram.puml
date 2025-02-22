@@ -82,7 +82,6 @@ class ExpensePieChartController {
 }
 
 class ExpenseRepository {
-    - LOG : Logger
     - hikariDataSource : HikariDataSource
     + ExpenseRepository(hikariDataSource : HikariDataSource)
     + findById(id : Long) : Optional<Expense>

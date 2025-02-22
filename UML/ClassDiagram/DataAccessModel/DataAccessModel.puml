@@ -1,0 +1,50 @@
+@startuml
+package "Data Access Layer (DAO)" {
+    interface Repository<T, ID> {
+        + findById(id : ID) : Optional<T>
+        + findAll() : Iterable<T>
+        + save(entity : T) : T
+        + deleteById(id : ID) : void
+        + deleteAll() : void
+    }
+
+    class ExpenseRepository implements Repository<Expense, Long> {
+        - hikariDataSource : HikariDataSource
+        + ExpenseRepository(hikariDataSource : HikariDataSource)
+        + findById(id : Long) : Optional<Expense>
+        + findAll() : Iterable<Expense>
+        + save(entity : Expense) : Expense
+        + deleteById(id : Long) : void
+        + deleteAll() : void
+    }
+
+    class UserRepository implements Repository<User, Long> {
+        - hikariDataSource : HikariDataSource
+        + UserRepository(hikariDataSource : HikariDataSource)
+        + findById(id : Long) : Optional<User>
+        + findAll() : Iterable<User>
+        + save(entity : User) : User
+        + deleteById(id : Long) : void
+        + deleteAll() : void
+    }
+}
+
+package "Domain Layer" {
+    class Expense {
+        - id : Long
+        - amount : Double
+        - date : LocalDate
+        - description : String
+    }
+
+    class User {
+        - id : Long
+        - username : String
+        - password : String
+    }
+}
+
+ExpenseRepository ..> Expense : manages
+UserRepository ..> User : manages
+
+@enduml
