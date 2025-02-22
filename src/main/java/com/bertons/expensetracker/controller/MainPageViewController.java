@@ -188,6 +188,7 @@ public class MainPageViewController implements ViewController, ObservableExpense
         updateAction.accept(expense);
         expenseRepository.save(expense);
         updateExpenses();
+        notifyAllObservers(expenses);
     }
     private void showAlert(String message) {
         new Alert(Alert.AlertType.ERROR, message, ButtonType.OK).showAndWait();
@@ -367,10 +368,6 @@ public class MainPageViewController implements ViewController, ObservableExpense
         Scene scene = new Scene(root);
         stage.setScene(scene);
         return new Pair<>(chartController, stage);
-    }
-
-    public ObservableList<Expense> getExpenses() {
-        return expenses;
     }
 
     public void OnButtonRefreshData_Click(ActionEvent actionEvent) {
