@@ -1,0 +1,23 @@
+@startuml
+actor User
+
+package "Expense Tracker" {
+  [View] as view
+  [Model] as model
+  [Controller] as controller
+  database "Postgresql" as db
+}
+
+model -> db : update data
+db --> model : read data
+model -> controller
+
+view --> User : shows data
+view <-- model : updates
+view <-- controller : updates
+
+controller <-- User : inputs data
+controller -> model
+
+
+@enduml

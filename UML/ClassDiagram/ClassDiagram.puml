@@ -20,8 +20,8 @@ interface Closeable {
 interface ViewController{
    + close() : void
    + initDataSource(hikariDataSource : HikariDataSource) : void
+   + setRepository(repository : Repository) : void
 }
-
 interface Repository<T, ID>{
      + findById(id : ID) : Optional<T>
      + findAll() : Iterable<T>
@@ -133,11 +133,11 @@ App -> ViewController
 DataSource <|-- ViewController
 Closeable <|-- ViewController
 
+ViewController --> Repository
+
 ViewController <|.. LoginViewController
-LoginViewController --> Repository
 
 ViewController <|.. MainPageViewController
-MainPageViewController --> Repository
 MainPageViewController --> ChartController
 MainPageViewController --> AddExpenseDialog
 

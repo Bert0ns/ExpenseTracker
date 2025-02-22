@@ -30,7 +30,6 @@ import javafx.util.converter.DoubleStringConverter;
 import javafx.util.converter.LocalDateStringConverter;
 import javafx.util.converter.LongStringConverter;
 import org.apache.commons.lang3.StringUtils;
-
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
@@ -225,7 +224,7 @@ public class MainPageViewController implements ViewController {
 
     @Override
     public void initDataSource(HikariDataSource hikariDataSource) {
-        this.expenseRepository = new ExpenseRepository(hikariDataSource);
+        setRepository(new ExpenseRepository(hikariDataSource));
         updateExpenses();
     }
 
@@ -392,5 +391,18 @@ public class MainPageViewController implements ViewController {
         updateExpenses();
         updatePieChart();
         updateAreaChart();
+    }
+
+    @Override
+    public <T, ID> void setRepository(Repository<T, ID> repository) {
+        if (repository != null) {
+            try {
+                this.expenseRepository = (Repository<Expense, Long>) repository;
+            } catch (ClassCastException e) {
+                throw new IllegalArgumentException("Invalid repository type passed.");
+            }
+        } else {
+            throw new IllegalArgumentException("Invalid repository object.");
+        }
     }
 }

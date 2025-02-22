@@ -34,8 +34,7 @@ public class LoginViewController implements ViewController {
     @Override
     public void initDataSource(HikariDataSource hikariDataSource) {
         this.hikariDataSource = hikariDataSource;
-        this.userRepository = new UserRepository(hikariDataSource);
-
+        setRepository(new UserRepository(hikariDataSource));
         //userRepository.deleteAll();
         //userRepository.save(new User("davide", String.valueOf("bertoni".hashCode())));
     }
@@ -88,5 +87,18 @@ public class LoginViewController implements ViewController {
     @Override
     public void close() {
         Platform.exit();
+    }
+
+    @Override
+    public <T, ID> void setRepository(Repository<T, ID> repository) {
+        if (repository != null) {
+            try {
+                this.userRepository = (Repository<User, Long>) repository;
+            } catch (ClassCastException e) {
+                throw new IllegalArgumentException("Invalid repository type passed.");
+            }
+        } else {
+            throw new IllegalArgumentException("Invalid repository object.");
+        }
     }
 }

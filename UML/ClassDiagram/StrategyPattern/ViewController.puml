@@ -1,0 +1,34 @@
+@startuml
+class ViewControllerContext {
+    + setController(controller : ViewController)
+}
+
+interface ViewController{
+   + close() : void
+   + initDataSource(hikariDataSource : HikariDataSource) : void
+   + setRepository(repository : Repository) : void
+}
+
+class MainPageViewController {
+    - hikariDataSource : HikariDataSource
+    + initialize() : void
+    + initDataSource(hikariDataSource : HikariDataSource) : void
+    + close() : void
+}
+
+class LoginViewController {
+    - tfPassword : PasswordField
+    - tfUsername : TextField
+    - hikariDataSource : HikariDataSource
+    - onCancelClicked() : void
+    - onOKClicked() : void
+    - launchApplication() : void
+    + close() : void
+    + initDataSource(hikariDataSource : HikariDataSource) : void
+}
+
+ViewControllerContext o-> ViewController
+ViewController <|-- MainPageViewController
+ViewController <|-- LoginViewController
+
+@enduml
