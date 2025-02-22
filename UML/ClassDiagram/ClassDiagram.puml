@@ -46,30 +46,39 @@ class MainPageViewController {
     + initialize() : void
     + initDataSource(hikariDataSource : HikariDataSource) : void
     + close() : void
+    + addObserver(observerExpense : ObserverExpense) : void
+    + removeObserver(observerExpense : ObserverExpense) : void
+    + notifyAllObservers(expenses : ObservableList<Expense>) : void
+}
+
+interface ObservableExpense {
+    + addObserver(observerExpense : ObserverExpense) : void
+    + removeObserver(observerExpense : ObserverExpense) : void
+    + notifyAllObservers(expenses : ObservableList<Expense>) : void
+}
+interface ObserverExpense {
+    + update(newExpenses : ObservableList<Expense>) : void
 }
 
 interface DataToCharts {
-    + initCharts(expensesData : ObservableList<Expense>, mainPageViewController : MainPageViewController) : void
-    + updateCharts(expensesData : ObservableList<Expense>) : void
+    + initCharts(expensesData : ObservableList<Expense>) : void
 }
 
 abstract class ChartController {
-    + initCharts(expensesData : ObservableList<Expense>, mainPageViewController : MainPageViewController) : void
-    + updateCharts(expensesData : ObservableList<Expense>) : void
+    + initCharts(expensesData : ObservableList<Expense>) : void
+    + update(expensesData : ObservableList<Expense>) : void
     + showAboutInformation(contentText : String )
     + close() : void
 }
-
 class ExpenseAreaChartController {
     + close() : void
-    + initCharts(expensesData : ObservableList<Expense>, mainPageViewController : MainPageViewController) : void
-    + updateCharts(expensesData : ObservableList<Expense>) : void
+    + initCharts(expensesData : ObservableList<Expense>) : void
+    + update(expensesData : ObservableList<Expense>) : void
 }
-
 class ExpensePieChartController {
     + close() : void
-    + initCharts(expensesData : ObservableList<Expense>, mainPageViewController : MainPageViewController) : void
-    + updateCharts(expensesData : ObservableList<Expense>) : void
+    + initCharts(expensesData : ObservableList<Expense>) : void
+    + update(expensesData : ObservableList<Expense>) : void
 }
 
 class ExpenseRepository {
@@ -126,7 +135,6 @@ class AddExpenseDialog {
 }
 
 
-
 Application <|-- App
 App -> ViewController
 
@@ -138,17 +146,19 @@ ViewController --> Repository
 ViewController <|.. LoginViewController
 
 ViewController <|.. MainPageViewController
+ObservableExpense <|.. MainPageViewController
 MainPageViewController --> ChartController
 MainPageViewController --> AddExpenseDialog
 
-Closeable <|-- ChartController
-DataToCharts <|-- ChartController
+ObservableExpense -> ObserverExpense
 
-ChartController <|... ExpenseAreaChartController
-ExpenseAreaChartController --> MainPageViewController
+Closeable <|.. ChartController
+DataToCharts <|.. ChartController
 
-ChartController <|.. ExpensePieChartController
-ExpensePieChartController --> MainPageViewController
+ObserverExpense <|.. ChartController
+ChartController <|-- ExpenseAreaChartController
+ChartController <|-- ExpensePieChartController
+ChartController --> Expense
 
 Repository <|.. ExpenseRepository
 ExpenseRepository --> Expense

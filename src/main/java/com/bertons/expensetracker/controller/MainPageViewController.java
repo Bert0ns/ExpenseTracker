@@ -34,6 +34,7 @@ import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
@@ -41,7 +42,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.StreamSupport;
 
-public class MainPageViewController implements ViewController {
+public class MainPageViewController implements ViewController, ObservableExpense {
     @FXML
     private TableView<Expense> tableViewExpenses;
     @FXML
@@ -62,6 +63,7 @@ public class MainPageViewController implements ViewController {
 
     private ChartController expensePieChartController;
     private ChartController expenseAreaChartController;
+    private final List<ObserverExpense> observers = new ArrayList<ObserverExpense>();
 
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     private static final String INVALID_AMOUNT_MESSAGE = "Input amount: %s\nIs NOT a number, try changing \",\" with \".\"";
@@ -185,8 +187,7 @@ public class MainPageViewController implements ViewController {
     private void updateExpense(Expense expense, Consumer<Expense> updateAction) {
         updateAction.accept(expense);
         expenseRepository.save(expense);
-        updatePieChart();
-        updateAreaChart();
+        updateExpenses();
     }
     private void showAlert(String message) {
         new Alert(Alert.AlertType.ERROR, message, ButtonType.OK).showAndWait();
@@ -202,19 +203,16 @@ public class MainPageViewController implements ViewController {
         }
     }
 
-    private void updatePieChart() {
-        if(Objects.isNull(expensePieChartController))
-        {
-            return;
-        }
-        expensePieChartController.updateCharts(expenses);
+    private void updateCharts()
+    {
+        notifyAllObservers(expenses);
     }
-    private void updateAreaChart() {
-        if(Objects.isNull(expenseAreaChartController))
-        {
-            return;
+
+    private void closeChart(ChartController expensePieChartController) {
+        if (Objects.nonNull(expensePieChartController)) {
+            expensePieChartController.close();
+            removeObserver(expensePieChartController);
         }
-        expenseAreaChartController.updateCharts(expenses);
     }
 
     @FXML
@@ -230,14 +228,8 @@ public class MainPageViewController implements ViewController {
 
     @Override
     public void close() {
-        if(Objects.nonNull(expensePieChartController))
-        {
-            expensePieChartController.close();
-        }
-        if(Objects.nonNull(expenseAreaChartController))
-        {
-            expenseAreaChartController.close();
-        }
+        closeChart(expensePieChartController);
+        closeChart(expenseAreaChartController);
     }
 
     public void OnMenuFileCloseButton_Click(ActionEvent actionEvent) {
@@ -279,8 +271,7 @@ public class MainPageViewController implements ViewController {
                 new Alert(Alert.AlertType.ERROR, e.getMessage(), ButtonType.OK).showAndWait();
             }
         }
-        updatePieChart();
-        updateAreaChart();
+        updateCharts();
     }
 
     public void OnMenuFileExportButton_Click(ActionEvent actionEvent) {
@@ -306,8 +297,7 @@ public class MainPageViewController implements ViewController {
             try {
                 expenseRepository.save(expense);
                 updateExpenses();
-                updateAreaChart();
-                updatePieChart();
+                updateCharts();
             } catch (RuntimeException e) {
                 new Alert(Alert.AlertType.ERROR, e.getMessage(), ButtonType.OK).showAndWait();
             }
@@ -320,8 +310,7 @@ public class MainPageViewController implements ViewController {
             try {
                 expenseRepository.deleteById(selectedItem.getId());
                 updateExpenses();
-                updatePieChart();
-                updateAreaChart();
+                updateCharts();
             } catch (RuntimeException e) {
                 new Alert(Alert.AlertType.ERROR, e.getMessage(), ButtonType.OK).showAndWait();
             }
@@ -330,16 +319,14 @@ public class MainPageViewController implements ViewController {
     }
 
     public void OnMenuViewPieChartButton_Click(ActionEvent actionEvent) throws IOException {
-        if(Objects.nonNull(expensePieChartController))
-        {
-            expensePieChartController.close();
-        }
+        closeChart(expensePieChartController);
 
         Pair<ChartController, Stage> values = openChart("expense-pie-chart-view.fxml");
         expensePieChartController = values.getKey();
+        addObserver(expensePieChartController);
+
         Stage stage = values.getValue();
         stage.setTitle("Expense Pie Chart");
-
         stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/bertons/expensetracker/images/icons/App-icon.png"))));
         stage.setResizable(true);
         stage.setHeight(500);
@@ -351,13 +338,12 @@ public class MainPageViewController implements ViewController {
     }
 
     public void OnMenuViewAreaChartButton_Click(ActionEvent actionEvent) throws IOException {
-        if(Objects.nonNull(expenseAreaChartController))
-        {
-            expenseAreaChartController.close();
-        }
+        closeChart(expenseAreaChartController);
 
         Pair<ChartController, Stage> values = openChart("expense-area-chart-view.fxml");
         expenseAreaChartController = values.getKey();
+        addObserver(expenseAreaChartController);
+
         Stage stage = values.getValue();
         stage.setTitle("Expense Area Chart");
         stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/bertons/expensetracker/images/icons/App-icon.png"))));
@@ -375,7 +361,7 @@ public class MainPageViewController implements ViewController {
         ChartController chartController = loader.getController();
 
         updateExpenses();
-        chartController.initCharts(expenses, this);
+        chartController.initCharts(expenses);
 
         Stage stage = new Stage();
         Scene scene = new Scene(root);
@@ -389,8 +375,7 @@ public class MainPageViewController implements ViewController {
 
     public void OnButtonRefreshData_Click(ActionEvent actionEvent) {
         updateExpenses();
-        updatePieChart();
-        updateAreaChart();
+        updateCharts();
     }
 
     @Override
@@ -403,6 +388,23 @@ public class MainPageViewController implements ViewController {
             }
         } else {
             throw new IllegalArgumentException("Invalid repository object.");
+        }
+    }
+
+    @Override
+    public void addObserver(ObserverExpense observerExpense) {
+        observers.add(observerExpense);
+    }
+
+    @Override
+    public void removeObserver(ObserverExpense observerExpense) {
+        observers.remove(observerExpense);
+    }
+
+    @Override
+    public void notifyAllObservers(ObservableList<Expense> expenses) {
+        for (ObserverExpense observerExpense : observers) {
+            observerExpense.update(expenses);
         }
     }
 }

@@ -3,6 +3,6 @@ package com.bertons.expensetracker.controller;
 import com.bertons.expensetracker.persistence.model.Expense;
 import javafx.collections.ObservableList;
 
-public interface DataToCharts {
-    void initCharts(ObservableList<Expense> expensesData);
+public interface ObserverExpense {
+    void update(ObservableList<Expense> newExpenses);
 }

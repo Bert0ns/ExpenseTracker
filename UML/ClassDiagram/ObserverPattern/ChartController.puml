@@ -1,0 +1,46 @@
+@startuml
+
+interface ObservableExpense {
+    + addObserver(observerExpense : ObserverExpense) : void
+    + removeObserver(observerExpense : ObserverExpense) : void
+    + notifyAllObservers(expenses : ObservableList<Expense>) : void
+}
+interface ObserverExpense {
+    + update(newExpenses : ObservableList<Expense>) : void
+}
+
+class MainPageViewController {
+    - hikariDataSource : HikariDataSource
+    + initialize() : void
+    + initDataSource(hikariDataSource : HikariDataSource) : void
+    + close() : void
+    + addObserver(observerExpense : ObserverExpense) : void
+    + removeObserver(observerExpense : ObserverExpense) : void
+    + notifyAllObservers(expenses : ObservableList<Expense>) : void
+}
+
+abstract class ChartController {
+    + initCharts(expensesData : ObservableList<Expense>) : void
+    + update(expensesData : ObservableList<Expense>) : void
+    + showAboutInformation(contentText : String )
+    + close() : void
+}
+class ExpenseAreaChartController {
+    + close() : void
+    + initCharts(expensesData : ObservableList<Expense>) : void
+    + update(expensesData : ObservableList<Expense>) : void
+}
+class ExpensePieChartController {
+    + close() : void
+    + initCharts(expensesData : ObservableList<Expense>) : void
+    + update(expensesData : ObservableList<Expense>) : void
+}
+
+ObservableExpense <|.. MainPageViewController
+MainPageViewController -> ChartController
+ObserverExpense <|.. ChartController
+ObservableExpense -> ObserverExpense
+ChartController <|-- ExpenseAreaChartController
+ChartController <|-- ExpensePieChartController
+
+@enduml

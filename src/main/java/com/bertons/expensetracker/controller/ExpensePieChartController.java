@@ -25,7 +25,7 @@ public class ExpensePieChartController extends ChartController {
     ObservableList<PieChart.Data> payingMethodsPieChartData = FXCollections.observableArrayList();
 
     @Override
-    public void initCharts(ObservableList<Expense> expensesData, MainPageViewController mainPageViewController) {
+    public void initCharts(ObservableList<Expense> expensesData) {
         initExpenseTypesPieChartData();
         insertDataIntoExpenseTypesPieChartData(expensesData);
         expenseTypesPieChart.getData().setAll(expenseTypesPieChartData);
@@ -38,7 +38,11 @@ public class ExpensePieChartController extends ChartController {
     }
 
     @Override
-    public void updateCharts(ObservableList<Expense> expensesData) {
+    public void update(ObservableList<Expense> expensesData) {
+        updateCharts(expensesData);
+    }
+
+    private void updateCharts(ObservableList<Expense> expensesData) {
         updateExpenseTypesPieChartData(expensesData);
         updatePayingMethodPieChartData(expensesData);
     }
