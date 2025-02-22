@@ -26,7 +26,7 @@ public class App extends Application {
     public void start(Stage primaryStage) throws IOException {
         HikariDataSource hikariDataSource = createDataSource();
 
-        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("controller/login-view.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("view/login-view.fxml"));
         Parent root = fxmlLoader.load();
         ViewController loginDataSource = fxmlLoader.getController();
         loginDataSource.initDataSource(hikariDataSource);

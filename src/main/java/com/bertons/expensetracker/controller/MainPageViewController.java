@@ -1,5 +1,6 @@
 package com.bertons.expensetracker.controller;
 
+import com.bertons.expensetracker.App;
 import com.bertons.expensetracker.persistence.dao.ExpenseRepository;
 import com.bertons.expensetracker.persistence.dao.Repository;
 import com.bertons.expensetracker.persistence.model.Expense;
@@ -322,7 +323,7 @@ public class MainPageViewController implements ViewController, ObservableExpense
     public void OnMenuViewPieChartButton_Click(ActionEvent actionEvent) throws IOException {
         closeChart(expensePieChartController);
 
-        Pair<ChartController, Stage> values = openChart("expense-pie-chart-view.fxml");
+        Pair<ChartController, Stage> values = openChart("view/expense-pie-chart-view.fxml");
         expensePieChartController = values.getKey();
         addObserver(expensePieChartController);
 
@@ -341,7 +342,7 @@ public class MainPageViewController implements ViewController, ObservableExpense
     public void OnMenuViewAreaChartButton_Click(ActionEvent actionEvent) throws IOException {
         closeChart(expenseAreaChartController);
 
-        Pair<ChartController, Stage> values = openChart("expense-area-chart-view.fxml");
+        Pair<ChartController, Stage> values = openChart("view/expense-area-chart-view.fxml");
         expenseAreaChartController = values.getKey();
         addObserver(expenseAreaChartController);
 
@@ -357,7 +358,7 @@ public class MainPageViewController implements ViewController, ObservableExpense
     }
 
     private Pair<ChartController, Stage> openChart(String viewPath) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource(viewPath));
+        FXMLLoader loader = new FXMLLoader(App.class.getResource(viewPath));
         Parent root = loader.load();
         ChartController chartController = loader.getController();
 

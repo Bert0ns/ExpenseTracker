@@ -1,5 +1,6 @@
 package com.bertons.expensetracker.controller;
 
+import com.bertons.expensetracker.App;
 import com.bertons.expensetracker.persistence.dao.Repository;
 import com.bertons.expensetracker.persistence.dao.UserRepository;
 import com.bertons.expensetracker.persistence.model.User;
@@ -62,8 +63,7 @@ public class LoginViewController implements ViewController {
     }
 
     private void launchApplication() throws IOException {
-
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("main_page-view.fxml"));
+        FXMLLoader loader = new FXMLLoader(App.class.getResource("view/main_page-view.fxml"));
         Parent root = loader.load();
         ViewController mainViewController = loader.getController();
         mainViewController.initDataSource(hikariDataSource);
